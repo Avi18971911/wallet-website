@@ -1,13 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {ActivatedRoute} from "@angular/router";
 import {FormsModule} from "@angular/forms";
+import {AccountsService, HandlersAccountLoginDTO} from "../../backend-api";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -16,7 +18,7 @@ export class LoginComponent {
   protected username: string;
   protected password: string;
   constructor(
-    private http: HttpClient,
+    private accountService: AccountsService,
   ) {
     this.username = "";
     this.password = "";
@@ -24,18 +26,16 @@ export class LoginComponent {
   onLogin() {
     console.log('Username:', this.username);
     console.log('Password:', this.password);
+    this.fetchUserData(this.username, this.password);
   }
 
-  fetchUserData(userId: string) {
-    const apiUrl = `https://yourapi.com/users/${userId}`;
-    this.http.get(apiUrl).subscribe(
-      response => {
-        console.log('User data:', response);
-        // Handle the response data here
-      },
-      error => {
-        console.error('There was an error!', error);
-      }
-    );
+  fetchUserData(userId: string, password: string) {
+    const loginPayload: HandlersAccountLoginDTO = {
+      username: userId,
+      password: password
+    }
+    this.accountService.accountsLoginPost(loginPayload).subscribe((data) => {
+      console.log(data);
+    });
   }
 }
