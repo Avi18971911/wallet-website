@@ -1,28 +1,40 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClientModule} from '@angular/common/http';
-import {ActivatedRoute} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import {AccountsService, HandlersAccountLoginDTO} from "../../backend-api";
+import {Router} from "@angular/router";
+import {NgIf} from "@angular/common";
+import {animate, keyframes, style, transition, trigger} from "@angular/animations";
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     FormsModule,
-    HttpClientModule,
+    NgIf,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+  animations: [
+    trigger('shake', [
+      transition('void => *', [
+        animate('0.5s', keyframes([
+          style({ transform: 'translateX(0)', offset: 0 }),
+          style({ transform: 'translateX(-10px)', offset: 0.25 }),
+          style({ transform: 'translateX(10px)', offset: 0.5 }),
+          style({ transform: 'translateX(-10px)', offset: 0.75 }),
+          style({ transform: 'translateX(0)', offset: 1 })
+        ]))
+      ])
+    ])
+  ]
 })
 export class LoginComponent {
-  protected username: string;
-  protected password: string;
+  protected username: string = "";
+  protected password: string = "";
+  protected errorMessage: string = "";
   constructor(
-    private accountService: AccountsService,
-  ) {
-    this.username = "";
-    this.password = "";
-  }
+    private accountService: AccountsService, private router: Router,
+  ) { }
   onLogin() {
     console.log('Username:', this.username);
     console.log('Password:', this.password);
@@ -34,8 +46,15 @@ export class LoginComponent {
       username: userId,
       password: password
     }
-    this.accountService.accountsLoginPost(loginPayload).subscribe((data) => {
-      console.log(data);
-    });
+    this.accountService.accountsLoginPost(loginPayload).subscribe(
+      (data) => {
+        console.log(data);
+        this.errorMessage = "";
+        this.router.navigate(['/Welcome'], { state: { accountData: data }})
+      },
+      (error) => {
+        console.log(error);
+        this.errorMessage = "Sorry, you have entered invalid credentials.";
+      });
   }
 }

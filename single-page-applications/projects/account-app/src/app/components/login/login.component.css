@@ -50,3 +50,10 @@ button:hover {
   justify-content: center;
   align-items: center;
 }
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
