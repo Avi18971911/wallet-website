@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {AccountsService, HandlersAccountLoginDTO} from "../../backend-api";
+import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {animate, keyframes, style, transition, trigger} from "@angular/animations";
@@ -28,12 +29,15 @@ import {animate, keyframes, style, transition, trigger} from "@angular/animation
     ])
   ]
 })
+
 export class LoginComponent {
   protected username: string = "";
   protected password: string = "";
   protected errorMessage: string = "";
   constructor(
-    private accountService: AccountsService, private router: Router,
+    private accountService: AccountsService,
+    private authService: AuthService,
+    private router: Router,
   ) { }
   onLogin() {
     console.log('Username:', this.username);
@@ -50,7 +54,8 @@ export class LoginComponent {
       (data) => {
         console.log(data);
         this.errorMessage = "";
-        this.router.navigate(['/Welcome'], { state: { accountData: data }})
+        this.authService.setUserData(data);
+        this.router.navigate(['/welcome'], { state: { accountData: data }})
       },
       (error) => {
         console.log(error);
