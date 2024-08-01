@@ -11,9 +11,26 @@ import {CommonModule} from "@angular/common";
 })
 export class DashboardComponent implements OnInit {
   protected accountDetails: HandlersAccountDetailsDTO = { };
-  constructor(private authService: AuthService) { }
+  protected currentMonth: string = "";
+  protected currentYear: number = 0
+  constructor(
+    private authService: AuthService
+  ) { }
+
+  private monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
   ngOnInit() {
-    this.accountDetails = this.authService.getUserData()
-    console.log("Dashboard deets", this.accountDetails);
+    this.accountDetails = this.authService.getUserData();
+    this.setCurrentMonthAndYear();
+  }
+
+  setCurrentMonthAndYear(): void {
+    const currentDate = new Date();
+    const month = currentDate.getMonth();
+    this.currentMonth = this.monthNames[month]; // Ensuring two digits for the month
+    this.currentYear = currentDate.getFullYear();
   }
 }

@@ -19,7 +19,6 @@
 
 .slim-column {
   flex: 1;
-  background-color: #f4f4f4;
   padding: 20px;
 }
 
@@ -33,7 +32,6 @@
 .upper-row {
   flex: 1;
   padding: 20px;
-  background-color: #e4e4e4;
 }
 
 .lower-row {

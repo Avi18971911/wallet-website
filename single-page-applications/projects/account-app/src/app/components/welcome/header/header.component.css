@@ -15,8 +15,10 @@ html, body {
   color: white;
   position: sticky;
   display: flex;
+  top: 0;
   flex-direction: column;
   overflow-x: hidden;
+  z-index: 1000;
 }
 
 .header-row {
