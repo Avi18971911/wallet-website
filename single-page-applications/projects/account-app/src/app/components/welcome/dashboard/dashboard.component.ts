@@ -2,10 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import { AuthService } from "../../../services/auth.service";
 import {HandlersAccountDetailsDTO} from "../../../backend-api";
 import {CommonModule} from "@angular/common";
+import {BalanceChartComponent} from "../balance-chart/balance-chart.component";
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BalanceChartComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
