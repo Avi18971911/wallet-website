@@ -10,7 +10,7 @@
         <p>{{currentMonth}} {{currentYear}}</p>
       </div>
       <div class="lower-row">
-        <app-balance-chart />
+        <app-balance-chart [availableBalance]="accountDetails.availableBalance" />
       </div>
     </div>
   </div>

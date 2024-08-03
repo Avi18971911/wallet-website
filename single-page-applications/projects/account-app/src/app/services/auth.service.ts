@@ -15,6 +15,5 @@ export class AuthService {
   }
 
   getUserData(): HandlersAccountDetailsDTO {
-    console.log("Returning Data", this.userData);
     return this.userData;
   }}
