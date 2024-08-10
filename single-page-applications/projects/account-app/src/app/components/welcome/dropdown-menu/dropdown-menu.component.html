@@ -1,11 +1,15 @@
-<span class="top-level" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger"
-      aria-label="Access utilities related to your account." (mouseenter)="onMouseEnter(menuTrigger)"
-      (mouseleave)="onMouseLeave(menuTrigger)">
+<span class="top-level" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" [ngClass]="{'hovered': isHovered}"
+      aria-label="Access utilities related to your account."
+      (mouseenter)="onMouseEnter(menuTrigger)" (mouseleave)="onMouseLeave(menuTrigger)">
   {{title}}
 </span>
 <mat-menu #menu="matMenu" [hasBackdrop]="false">
   <span (mouseenter)="onMouseEnter(menuTrigger)" (mouseleave)="onMouseLeave(menuTrigger)">
-    <button mat-menu-item *ngFor="let menuItem of menuItems" >
+    <button class="button-span" mat-menu-item *ngFor="let menuItem of menuItems"
+            #menuItemButton
+            (mouseenter)="focusMenuItem(menuItemButton)"
+            (mouseleave)="removeFocus()">
+      >
       <span> {{menuItem}} </span>
     </button>
   </span>
