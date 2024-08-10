@@ -11,7 +11,9 @@
     <div class="middle-content">
       <nav>
         <ul>
-          <li routerLinkActive="active"><a routerLink="/accounts">My Accounts</a></li>
+          <li>
+            <app-dropdown-menu [title]="accountMenuTitle" [menuItems]="accountMenuItems"> </app-dropdown-menu>
+          </li>
           <li routerLinkActive="active"><a routerLink="/transfer">Transfer</a></li>
           <li routerLinkActive="active"><a routerLink="/pay">Pay</a></li>
           <li routerLinkActive="active"><a routerLink="/cards">Cards</a></li>

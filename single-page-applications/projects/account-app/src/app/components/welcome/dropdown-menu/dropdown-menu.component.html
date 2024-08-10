@@ -1,0 +1,12 @@
+<span class="top-level" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger"
+      aria-label="Access utilities related to your account." (mouseenter)="onMouseEnter(menuTrigger)"
+      (mouseleave)="onMouseLeave(menuTrigger)">
+  {{title}}
+</span>
+<mat-menu #menu="matMenu" [hasBackdrop]="false">
+  <span (mouseenter)="onMouseEnter(menuTrigger)" (mouseleave)="onMouseLeave(menuTrigger)">
+    <button mat-menu-item *ngFor="let menuItem of menuItems" >
+      <span> {{menuItem}} </span>
+    </button>
+  </span>
+</mat-menu>

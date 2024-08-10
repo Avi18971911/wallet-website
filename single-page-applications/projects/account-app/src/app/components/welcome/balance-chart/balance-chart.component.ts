@@ -1,4 +1,4 @@
-import {Component, Inject, Input, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, Input, OnChanges, PLATFORM_ID} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {isPlatformBrowser, NgIf} from "@angular/common";
 
@@ -12,7 +12,7 @@ import {isPlatformBrowser, NgIf} from "@angular/common";
   templateUrl: './balance-chart.component.html',
   styleUrl: './balance-chart.component.css'
 })
-export class BalanceChartComponent {
+export class BalanceChartComponent implements OnChanges {
   @Input({required: true, transform: transformAvailableBalance}) availableBalance: number = 10000;
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
