@@ -43,9 +43,10 @@ html, body {
 .logout-link {
   color: white;
   text-decoration: none;
-  padding: 5px 10px;
   border: 1px solid white;
   border-radius: 5px;
+  padding: 5px 20px;
+  margin-left: 20px;
 }
 
 .login-link:hover {
@@ -79,4 +80,13 @@ nav ul li app-dropdown-menu {
   text-decoration: none;
   color: white;
   font-size: 18px;
+}
+
+mat-icon {
+  color: white;
+}
+
+.toolbar-link {
+  padding-right: 10px;
+  padding-left: 10px;
 }

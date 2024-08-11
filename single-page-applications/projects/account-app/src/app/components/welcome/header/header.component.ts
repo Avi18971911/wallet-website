@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {DropdownMenuComponent} from "../dropdown-menu/dropdown-menu.component";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'welcome-header',
@@ -9,6 +10,7 @@ import {DropdownMenuComponent} from "../dropdown-menu/dropdown-menu.component";
     RouterLink,
     RouterLinkActive,
     DropdownMenuComponent,
+    MatIcon,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
