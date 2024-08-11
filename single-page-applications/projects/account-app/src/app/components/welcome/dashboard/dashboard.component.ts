@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import { AuthService } from "../../../services/auth.service";
 import {HandlersAccountDetailsDTO} from "../../../backend-api";
 import {CommonModule} from "@angular/common";
-import {BalanceChartComponent} from "../balance-chart/balance-chart.component";
+import {BalanceChartComponent} from "./balance-chart/balance-chart.component";
 @Component({
   selector: 'app-dashboard',
   standalone: true,

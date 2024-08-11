@@ -3,6 +3,7 @@ import {MatIcon, MatIconModule} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuModule, MatMenuTrigger} from "@angular/material/menu";
 import {MatButtonModule, MatIconButton} from "@angular/material/button";
 import {NgClass, NgForOf} from "@angular/common";
+import {MenuItem} from "../../../models/menu-item.model";
 
 @Component({
   selector: 'app-dropdown-menu',
@@ -21,7 +22,7 @@ export class DropdownMenuComponent {
   protected timedOutCloser: NodeJS.Timeout | undefined;
   protected isHovered = false;
   @Input({required: true}) title: string = "";
-  @Input({required: true}) menuItems: string[] = [];
+  @Input({required: true}) menuItems: MenuItem[] = [];
   constructor(private renderer: Renderer2) {}
 
   onMouseEnter(trigger: MatMenuTrigger) {
