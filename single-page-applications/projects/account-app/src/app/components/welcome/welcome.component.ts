@@ -15,7 +15,7 @@ import {ActivatedRoute, Router, RouterOutlet} from "@angular/router";
 export class WelcomeComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute) {}
   ngOnInit() {
-    this.router.navigate(['dashboard'], {relativeTo: this.route}).catch((error) => {
+    this.router.navigate(['account', 'dashboard'], {relativeTo: this.route}).catch((error) => {
       console.error(error);
     });
   }

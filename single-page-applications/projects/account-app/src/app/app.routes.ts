@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: 'welcome',
     component: WelcomeComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'account/dashboard', component: DashboardComponent },
       { path: 'transfer/to-other-walletbank', component: TransferComponent },
     ],
   },

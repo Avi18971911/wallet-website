@@ -20,7 +20,7 @@ export class HeaderComponent {
   protected accountMenuTitle: string = 'My Account';
   protected transferMenuTitle: string = 'Transfer';
   protected accountMenuItems: MenuItem[] = [
-    {label: 'Home', link: ['account', 'home']},
+    {label: 'Home', link: ['account', 'dashboard']},
     {label: 'Deposits', link: ['account', 'deposits']},
     {label: 'Credit Cards', link: ['account', 'credit-cards']},
     {label: 'Debit Cards', link: ['account', 'debit-cards']},
