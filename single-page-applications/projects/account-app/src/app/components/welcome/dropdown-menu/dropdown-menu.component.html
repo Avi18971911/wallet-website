@@ -5,7 +5,7 @@
 </span>
 <mat-menu #menu="matMenu" [hasBackdrop]="false">
   <span (mouseenter)="onMouseEnter(menuTrigger)" (mouseleave)="onMouseLeave(menuTrigger)">
-    <a class="button-span" mat-menu-item *ngFor="let menuItem of menuItems" [href]="menuItem.link"
+    <a class="button-span" mat-menu-item *ngFor="let menuItem of menuItems" [routerLink]="['./'].concat(menuItem.link)"
             #menuItemButton
             (mouseenter)="focusMenuItem(menuItemButton)"
             (mouseleave)="removeFocus()">

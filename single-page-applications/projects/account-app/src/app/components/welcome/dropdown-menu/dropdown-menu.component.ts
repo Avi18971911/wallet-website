@@ -4,6 +4,7 @@ import {MatMenu, MatMenuItem, MatMenuModule, MatMenuTrigger} from "@angular/mate
 import {MatButtonModule, MatIconButton} from "@angular/material/button";
 import {NgClass, NgForOf} from "@angular/common";
 import {MenuItem} from "../../../models/menu-item.model";
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-dropdown-menu',
@@ -13,7 +14,8 @@ import {MenuItem} from "../../../models/menu-item.model";
     MatMenuModule,
     MatIconModule,
     NgForOf,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: './dropdown-menu.component.html',
   styleUrl: './dropdown-menu.component.css'
