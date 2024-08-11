@@ -9,7 +9,6 @@
 .button-span:hover,
 .button-span.cdk-focused,
 .button-span.cdk-program-focused {
-  --mat-app-background-color: navy;
   background: #00468B !important;
-  color: whitesmoke;       /* Optional: Change the text color */
+  color: whitesmoke;
 }
