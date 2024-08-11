@@ -17,5 +17,11 @@ import {MatIcon} from "@angular/material/icon";
 })
 export class HeaderComponent {
   protected accountMenuTitle: string = 'My Account';
-  protected accountMenuItems: string[] = ['Home', 'Deposits', 'Credit Cards', 'Debit Cards', 'Loans', 'Mortgages', 'Other'];
+  protected transferMenuTitle: string = 'Transfer';
+  protected accountMenuItems: string[] = [
+    'Home', 'Deposits', 'Credit Cards', 'Debit Cards', 'Loans', 'Mortgages', 'Other'
+  ];
+  protected transferMenuItems: string[] = [
+    'To Other WalletBank Accounts', 'To Other Banks',
+  ];
 }

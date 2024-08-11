@@ -23,7 +23,9 @@
           <li>
             <app-dropdown-menu [title]="accountMenuTitle" [menuItems]="accountMenuItems"> </app-dropdown-menu>
           </li>
-          <li routerLinkActive="active"><a routerLink="/transfer">Transfer</a></li>
+          <li>
+            <app-dropdown-menu [title]="transferMenuTitle" [menuItems]="transferMenuItems"> </app-dropdown-menu>
+          </li>
           <li routerLinkActive="active"><a routerLink="/pay">Pay</a></li>
           <li routerLinkActive="active"><a routerLink="/cards">Cards</a></li>
         </ul>
