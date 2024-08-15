@@ -3,6 +3,7 @@ import { AuthService } from "../../../services/auth.service";
 import {HandlersAccountDetailsDTO} from "../../../backend-api";
 import {CommonModule} from "@angular/common";
 import {BalanceChartComponent} from "./balance-chart/balance-chart.component";
+import {DateFormatService} from "../../../services/date-format.service";
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -15,13 +16,9 @@ export class DashboardComponent implements OnInit {
   protected currentMonth: string = "";
   protected currentYear: number = 0
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private dateService: DateFormatService,
   ) { }
-
-  private monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
 
   ngOnInit() {
     this.accountDetails = this.authService.getUserData();
@@ -29,9 +26,8 @@ export class DashboardComponent implements OnInit {
   }
 
   setCurrentMonthAndYear(): void {
-    const currentDate = new Date();
-    const month = currentDate.getMonth();
-    this.currentMonth = this.monthNames[month]; // Ensuring two digits for the month
-    this.currentYear = currentDate.getFullYear();
+    const currentDateTime = this.dateService.getCurrentDate();
+    this.currentMonth = currentDateTime.month;
+    this.currentYear = parseInt(currentDateTime.year);
   }
 }
