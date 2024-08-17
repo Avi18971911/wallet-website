@@ -13,9 +13,10 @@ export class DateFormatService {
   ];
 
   private readonly DAY_REGEX = /^([1-9]|[12][0-9]|3[01])$/;
-  private readonly MONTH_REGEX = /^(January|February|March|April|May|June|July|August|September|October|November|December)$/;
+  private readonly MONTH_REGEX =
+    /^(January|February|March|April|May|June|July|August|September|October|November|December)$/;
   private readonly YEAR_REGEX = /^\d{4}$/;
-  private readonly TIME_REGEX = /^(0[1-9]|1[0-2]):[0-5][0-9]:[0-5][0-9] (AM|PM)$/;
+  private readonly TIME_REGEX = /^([1-9]|1[0-2]):[0-5][0-9]:[0-5][0-9] (AM|PM)$/;
 
 
   validateDateTime(dateTime: DateTime) {
@@ -43,7 +44,7 @@ export class DateFormatService {
     };
 
     if (!this.validateDateTime(generatedDateTime)) {
-      throw new Error('Invalid date time' + JSON.stringify(generatedDateTime));
+      console.log('Invalid date time generated: ', generatedDateTime);
     }
 
     return generatedDateTime;

@@ -18,6 +18,7 @@ export class InputDetailsComponent implements OnInit {
 
   getDateTimeAsString(): string {
     const currentDateTime = this.dateService.getCurrentDate();
-    return `${currentDateTime.month} ${currentDateTime.day}, ${currentDateTime.year} ${currentDateTime.time} ${currentDateTime.location}`;
+    return `${currentDateTime.day} ${currentDateTime.month} ${currentDateTime.year}
+    ${currentDateTime.time} ${currentDateTime.location}`;
   }
 }

@@ -5,3 +5,11 @@
   display: flex;
   flex-direction: column;
 }
+
+.datetime {
+  color: darkgrey;
+}
+
+.header, .datetime {
+  margin: 5px 0px;
+}
