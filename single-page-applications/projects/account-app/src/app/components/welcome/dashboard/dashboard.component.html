@@ -7,7 +7,7 @@
     <div class="big-column">
       <div class="upper-row">
         <p>Your Financial Overview</p>
-        <p>{{currentMonth}} {{currentYear}}</p>
+        <p>{{currentMonthAndYear.month}} {{currentMonthAndYear.year}}</p>
       </div>
       <div class="lower-row">
         <app-balance-chart [availableBalance]="accountDetails.availableBalance" />
