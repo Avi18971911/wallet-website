@@ -1,24 +1,30 @@
 import { Routes } from '@angular/router';
 import {LoginComponent} from "./components/login/login.component";
-import {WelcomeComponent} from "./components/welcome/welcome.component";
-import {DashboardComponent} from "./components/welcome/dashboard/dashboard.component";
-import {TransferWalletBankComponent} from "./components/welcome/transfer/transfer-wallet-bank.component";
-import {InputDetailsComponent} from "./components/welcome/transfer/input-details/input-details.component";
+import {AccountComponent} from "./components/account/account.component";
+import {DashboardComponent} from "./components/account/dashboard/dashboard.component";
+import {TransferWalletBankComponent} from "./components/account/transfer/transfer-wallet-bank.component";
+import {InputDetailsComponent} from "./components/account/transfer/input-details/input-details.component";
+import {RouteNames} from "./route-names";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
-  { path: 'login', component: LoginComponent },
+  { path: RouteNames.LOGIN, component: LoginComponent },
   {
-    path: 'welcome',
-    component: WelcomeComponent,
+    path: RouteNames.ACCOUNT,
+    component: AccountComponent,
     children: [
-      { path: 'account/dashboard', component: DashboardComponent },
+      { path: RouteNames.DASHBOARD, component: DashboardComponent },
       {
-        path: 'transfer/to-other-walletbank',
-        component: TransferWalletBankComponent,
-        children: [
-          { path: 'input-details', component: InputDetailsComponent}
-        ],
+        path: RouteNames.TRANSFER,
+        children:[
+          {
+            path: RouteNames.OTHER_WALLETBANK,
+            component: TransferWalletBankComponent,
+            children: [
+              {path: 'input-details', component: InputDetailsComponent}
+            ],
+          }
+        ]
       },
     ],
   },

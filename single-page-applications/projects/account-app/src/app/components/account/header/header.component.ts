@@ -3,6 +3,7 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 import {DropdownMenuComponent} from "../dropdown-menu/dropdown-menu.component";
 import {MatIcon} from "@angular/material/icon";
 import {MenuItem} from "../../../models/menu-item.model";
+import {RouteNames} from "../../../route-names";
 
 @Component({
   selector: 'welcome-header',
@@ -20,17 +21,17 @@ export class HeaderComponent {
   protected accountMenuTitle: string = 'My Account';
   protected transferMenuTitle: string = 'Transfer';
   protected accountMenuItems: MenuItem[] = [
-    {label: 'Home', link: ['account', 'dashboard']},
-    {label: 'Deposits', link: ['account', 'deposits']},
-    {label: 'Credit Cards', link: ['account', 'credit-cards']},
-    {label: 'Debit Cards', link: ['account', 'debit-cards']},
-    {label: 'Loans', link: ['account', 'loans']},
-    {label: 'Mortgages', link: ['account', 'mortgages']},
-    {label: 'Other', link: ['account', 'other']},
+    {label: 'Home', link: [RouteNames.DASHBOARD]},
+    {label: 'Deposits', link: ['deposits']},
+    {label: 'Credit Cards', link: ['credit-cards']},
+    {label: 'Debit Cards', link: ['debit-cards']},
+    {label: 'Loans', link: ['loans']},
+    {label: 'Mortgages', link: ['mortgages']},
+    {label: 'Other', link: ['other']},
   ];
   protected transferMenuItems: MenuItem[] = [
-    {label: 'To My Accounts', link: ['transfer', 'to-my-accounts']},
-    {label: 'To Other WalletBank Accounts', link: ['transfer', 'to-other-walletbank']},
-    {label: 'To Other Banks', link: ['transfer', 'to-other-banks']},
+    {label: 'To My Accounts', link: [RouteNames.TRANSFER, 'to-my-accounts']},
+    {label: 'To Other WalletBank Accounts', link: [RouteNames.TRANSFER, RouteNames.OTHER_WALLETBANK]},
+    {label: 'To Other Banks', link: [RouteNames.TRANSFER, 'to-other-banks']},
   ];
 }

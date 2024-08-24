@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import {BarController, BarElement, CategoryScale, Chart, Colors, Legend, LinearScale, Title, Tooltip} from "chart.js";
 import {AuthService} from "./services/auth.service";
 import {AccountService} from "./services/account.service";
+import {RouteNames} from "./route-names";
 
 Chart.register(BarController, BarElement, CategoryScale, Colors, LinearScale, Title, Tooltip, Legend);
 
@@ -27,13 +28,13 @@ export class AppComponent implements OnInit {
     private accountService: AccountService,
   ) {}
   ngOnInit() {
-    this.router.navigate(['/login']);
+    this.router.navigate([RouteNames.LOGIN]);
     this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
       if (isAuthenticated) {
-        this.router.navigate(['/welcome']);
+        this.router.navigate([RouteNames.ACCOUNT]);
       }
       else {
-        this.router.navigate(['/login']);
+        this.router.navigate([RouteNames.LOGIN]);
       }
     });
     this.authService.loginResponse$.subscribe((response) => {
