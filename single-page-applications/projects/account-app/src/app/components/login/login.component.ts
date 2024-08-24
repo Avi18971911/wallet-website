@@ -5,6 +5,7 @@ import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {animate, keyframes, style, transition, trigger} from "@angular/animations";
+import {AccountService} from "../../services/account.service";
 
 @Component({
   selector: 'app-login',
@@ -35,8 +36,9 @@ export class LoginComponent {
   protected password: string = "";
   protected errorMessage: string = "";
   constructor(
-    private accountService: AccountsService,
+    private accountService: AccountService,
     private authService: AuthService,
+    private backendAccountService: AccountsService,
     private router: Router,
   ) { }
   onLogin() {
@@ -50,15 +52,13 @@ export class LoginComponent {
       username: userId,
       password: password
     }
-    this.accountService.accountsLoginPost(loginPayload).subscribe(
+    this.backendAccountService.accountsLoginPost(loginPayload).subscribe(
       (data) => {
-        console.log(data);
         this.errorMessage = "";
-        this.authService.setUserData(data);
+        this.accountService.setUserData(data);
         this.router.navigate(['/welcome'], { state: { accountData: data }})
       },
       (error) => {
-        console.log(error);
         this.errorMessage = "Sorry, you have entered invalid credentials.";
       });
   }

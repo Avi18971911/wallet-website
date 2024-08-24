@@ -1,8 +1,8 @@
 import {DateFormatService} from "../../../../services/date-format.service";
 import {TransferToComponent} from "../transfer-to/transfer-to.component";
 import {Component, OnInit} from "@angular/core";
-import {AuthService} from "../../../../services/auth.service";
 import {TransferToWalletAccountDetails} from "../../../../models/transferToWalletAccountDetails";
+import {AccountService} from "../../../../services/account.service";
 
 enum transferType {
   IMMEDIATE = "IMMEDIATE",
@@ -36,7 +36,7 @@ export class InputDetailsComponent implements OnInit {
 
   constructor(
     private dateService: DateFormatService,
-    private authService: AuthService,
+    private accountService: AccountService,
   ) { }
 
   get dateTime(): string {
@@ -50,7 +50,7 @@ export class InputDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    const userData = this.authService.getUserData();
+    const userData = this.accountService.getUserData();
     this.updateInputDetailsState({
       fromAccount: userData.accountNumber,
       amount: userData.availableBalance

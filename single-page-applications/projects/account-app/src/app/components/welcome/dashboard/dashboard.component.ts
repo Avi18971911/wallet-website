@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import { AuthService } from "../../../services/auth.service";
 import {DtoAccountDetailsDTO} from "../../../backend-api";
 import {CommonModule} from "@angular/common";
 import {BalanceChartComponent} from "./balance-chart/balance-chart.component";
 import {DateFormatService} from "../../../services/date-format.service";
+import {AccountService} from "../../../services/account.service";
 
 interface CurrentMonthAndYear {
   month: string;
@@ -32,12 +32,12 @@ export class DashboardComponent implements OnInit {
     createdAt: "",
   };
   constructor(
-    private authService: AuthService,
+    private accountService: AccountService,
     private dateService: DateFormatService,
   ) { }
 
   ngOnInit() {
-    this.accountDetails = this.authService.getUserData();
+    this.accountDetails = this.accountService.getUserData();
   }
 
   get currentMonthAndYear(): CurrentMonthAndYear {
