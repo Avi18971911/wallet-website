@@ -35,32 +35,28 @@ export class LoginComponent {
   protected username: string = "";
   protected password: string = "";
   protected errorMessage: string = "";
-  protected loginSuccessCallback: (data: DtoAccountDetailsDTO) => void =
-    (data) => {
-      this.errorMessage = "";
-      this.accountService.setUserData(data);
-      this.router.navigate(['/welcome'], { state: { accountData: data }});
-    }
-
-  protected loginErrorCallback: (error: any) => void =
-    (error) => {
-      this.errorMessage = "Sorry, you have entered invalid credentials.";
-    }
-
   constructor(
-    private accountService: AccountService,
     private authService: AuthService,
-    private router: Router,
   ) { }
   onLogin() {
-    this.fetchUserData(this.username, this.password);
+    this.validateLoginAndStoreDetails(this.username, this.password);
   }
 
-  fetchUserData(userId: string, password: string) {
+  validateLoginAndStoreDetails(userId: string, password: string) {
     const loginPayload: DtoAccountLoginDTO = {
       username: userId,
       password: password
     }
     this.authService.login(loginPayload, this.loginSuccessCallback, this.loginErrorCallback);
   }
+
+  protected loginSuccessCallback: () => void =
+    () => {
+      this.errorMessage = "";
+    }
+
+  protected loginErrorCallback: (error: any) => void =
+    (error) => {
+      this.errorMessage = "Sorry, you have entered invalid credentials.";
+    }
 }

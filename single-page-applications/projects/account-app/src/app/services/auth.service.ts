@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {AccountsService, DtoAccountDetailsDTO, DtoAccountLoginDTO,} from "../backend-api";
-import {BehaviorSubject, Observable, Observer} from "rxjs";
+import {BehaviorSubject, Observable, Observer, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +8,7 @@ import {BehaviorSubject, Observable, Observer} from "rxjs";
 export class AuthService {
   private isAuthenticatedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
+  public loginResponse$ = new Subject<DtoAccountDetailsDTO>();
 
   constructor(
     private backendAccountService: AccountsService,
@@ -15,17 +16,17 @@ export class AuthService {
 
   login(
     loginDetails: DtoAccountLoginDTO,
-    successCallback: (data: DtoAccountDetailsDTO) => void,
+    successCallback: () => void,
     errorCallback: (error: any) => void
   ){
 
     const observer: Observer<DtoAccountDetailsDTO> = {
         next: (data: DtoAccountDetailsDTO) => {
           this.isAuthenticatedSubject.next(true);
-          successCallback(data);
+          this.loginResponse$.next(data);
+          successCallback();
         },
         error: (error: any) => {
-          this.isAuthenticatedSubject.next(false);
           errorCallback(error);
         },
         complete: () => {
