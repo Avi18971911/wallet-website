@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {AccountsService, DtoAccountLoginDTO} from "../../backend-api";
+import {DtoAccountDetailsDTO, DtoAccountLoginDTO} from "../../backend-api";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
@@ -35,15 +35,24 @@ export class LoginComponent {
   protected username: string = "";
   protected password: string = "";
   protected errorMessage: string = "";
+  protected loginSuccessCallback: (data: DtoAccountDetailsDTO) => void =
+    (data) => {
+      this.errorMessage = "";
+      this.accountService.setUserData(data);
+      this.router.navigate(['/welcome'], { state: { accountData: data }});
+    }
+
+  protected loginErrorCallback: (error: any) => void =
+    (error) => {
+      this.errorMessage = "Sorry, you have entered invalid credentials.";
+    }
+
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
-    private backendAccountService: AccountsService,
     private router: Router,
   ) { }
   onLogin() {
-    console.log('Username:', this.username);
-    console.log('Password:', this.password);
     this.fetchUserData(this.username, this.password);
   }
 
@@ -52,14 +61,6 @@ export class LoginComponent {
       username: userId,
       password: password
     }
-    this.backendAccountService.accountsLoginPost(loginPayload).subscribe(
-      (data) => {
-        this.errorMessage = "";
-        this.accountService.setUserData(data);
-        this.router.navigate(['/welcome'], { state: { accountData: data }})
-      },
-      (error) => {
-        this.errorMessage = "Sorry, you have entered invalid credentials.";
-      });
+    this.authService.login(loginPayload, this.loginSuccessCallback, this.loginErrorCallback);
   }
 }
