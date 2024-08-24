@@ -26,6 +26,7 @@ interface InputDetailsState {
   styleUrl: './input-details.component.css'
 })
 export class InputDetailsComponent implements OnInit {
+  protected dateTime: string = "";
   protected knownAccounts: Array<TransferToWalletAccountDetails> = [];
   protected inputDetailsState: InputDetailsState = {
     toAccount: "",
@@ -39,17 +40,26 @@ export class InputDetailsComponent implements OnInit {
     private accountService: AccountService,
   ) { }
 
-  get dateTime(): string {
-    const currentDateTime = this.dateService.getCurrentDate();
-    return `${currentDateTime.day} ${currentDateTime.month} ${currentDateTime.year}
-    ${currentDateTime.time} ${currentDateTime.location}`;
-  }
-
   updateInputDetailsState(partialState: Partial<InputDetailsState>) {
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
   }
 
   ngOnInit() {
+    this.setDateTime();
+    this.setStateFromUserData();
+  }
+
+  setDateTime() {
+    this.dateTime = this.getDateTime()
+  }
+
+  getDateTime(): string {
+    const currentDateTime = this.dateService.getCurrentDate();
+    return `${currentDateTime.day} ${currentDateTime.month} ${currentDateTime.year}
+    ${currentDateTime.time} ${currentDateTime.location}`;
+  }
+
+  setStateFromUserData() {
     const userData = this.accountService.getUserData();
     this.updateInputDetailsState({
       fromAccount: userData.accountNumber,
@@ -61,9 +71,13 @@ export class InputDetailsComponent implements OnInit {
         {
           accountNumber: account.accountNumber,
           recipientName: account.accountHolder,
-          accountType: account.accountType
+          accountType: this.formatAccountType(account.accountType)
         }
       );
     });
+  }
+
+  formatAccountType(accountType: string): string {
+    return accountType.charAt(0).toUpperCase() + accountType.substring(1).toLowerCase()
   }
 }

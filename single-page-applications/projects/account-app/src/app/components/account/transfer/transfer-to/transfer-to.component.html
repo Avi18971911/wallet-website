@@ -3,7 +3,14 @@
     To
   </h2>
   <div class="underscore"></div>
-  <mat-select>
-
-  </mat-select>
+  <div class="row">
+    <mat-form-field appearance="outline">
+      <mat-label>Recipient Account</mat-label>
+        <mat-select [(value)]="selectedAccount" placeholder="Please select an account">
+          <mat-option *ngFor="let account of candidateAccountDetails" [value]="account">
+            {{ formatAccountDetails(account) }}
+          </mat-option>
+        </mat-select>
+    </mat-form-field>
+  </div>
 </div>

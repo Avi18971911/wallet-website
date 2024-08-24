@@ -6,8 +6,39 @@ h2 {
   width: 40%;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+}
 
 .underscore {
   border-bottom: 1px solid darkgrey;
   width: 100%;
+}
+
+.recipient {
+  flex: 2;
+}
+
+/* Apply styles to all mat-form-fields */
+mat-form-field {
+  width: 100%; /* Make form field take the full width */
+  margin-bottom: 16px; /* Add spacing between form fields */
+}
+
+/* Style the mat-select appearance */
+.mat-form-field-outline {
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Style the mat-select placeholder */
+.mat-select-placeholder {
+  color: gray; /* Placeholder text color */
+  font-size: 14px; /* Placeholder text size */
+}
+
+/* Style the mat-option text */
+.mat-option-text {
+  font-size: 14px; /* Option text size */
+  color: black; /* Option text color */
 }
