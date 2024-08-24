@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {AccountsService, HandlersAccountLoginDTO} from "../../backend-api";
+import {AccountsService, DtoAccountLoginDTO} from "../../backend-api";
 import {AuthService} from "../../services/auth.service";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
@@ -46,7 +46,7 @@ export class LoginComponent {
   }
 
   fetchUserData(userId: string, password: string) {
-    const loginPayload: HandlersAccountLoginDTO = {
+    const loginPayload: DtoAccountLoginDTO = {
       username: userId,
       password: password
     }

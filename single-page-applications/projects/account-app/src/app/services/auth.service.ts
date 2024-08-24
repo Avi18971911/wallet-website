@@ -1,19 +1,30 @@
 import { Injectable } from '@angular/core';
-import {Handler} from "express";
-import {HandlersAccountDetailsDTO} from "../backend-api";
+import {DtoAccountDetailsDTO} from "../backend-api";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private userData: HandlersAccountDetailsDTO = { };
+  private userData: DtoAccountDetailsDTO = {
+    accountNumber: "",
+    accountType: "",
+    availableBalance: 0,
+    id: "",
+    knownAccounts: [],
+    person: {
+      firstName: "",
+      lastName: "",
+    },
+    username: "",
+    createdAt: "",
+  };
 
   constructor() { }
 
-  setUserData(data: HandlersAccountDetailsDTO): void {
+  setUserData(data: DtoAccountDetailsDTO): void {
     this.userData = data;
   }
 
-  getUserData(): HandlersAccountDetailsDTO {
+  getUserData(): DtoAccountDetailsDTO {
     return this.userData;
   }}

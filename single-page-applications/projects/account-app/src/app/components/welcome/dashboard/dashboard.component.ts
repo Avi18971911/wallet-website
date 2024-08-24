@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { AuthService } from "../../../services/auth.service";
-import {HandlersAccountDetailsDTO} from "../../../backend-api";
+import {DtoAccountDetailsDTO} from "../../../backend-api";
 import {CommonModule} from "@angular/common";
 import {BalanceChartComponent} from "./balance-chart/balance-chart.component";
 import {DateFormatService} from "../../../services/date-format.service";
@@ -18,7 +18,19 @@ interface CurrentMonthAndYear {
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  protected accountDetails: HandlersAccountDetailsDTO = { };
+  protected accountDetails: DtoAccountDetailsDTO = {
+    accountNumber: "",
+    accountType: "",
+    availableBalance: 0,
+    id: "",
+    knownAccounts: [],
+    person: {
+      firstName: "",
+      lastName: "",
+    },
+    username: "",
+    createdAt: "",
+  };
   constructor(
     private authService: AuthService,
     private dateService: DateFormatService,

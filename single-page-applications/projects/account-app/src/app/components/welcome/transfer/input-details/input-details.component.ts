@@ -1,6 +1,8 @@
 import {DateFormatService} from "../../../../services/date-format.service";
 import {TransferToComponent} from "../transfer-to/transfer-to.component";
-import {Component} from "@angular/core";
+import {Component, OnInit} from "@angular/core";
+import {AuthService} from "../../../../services/auth.service";
+import {TransferToWalletAccountDetails} from "../../../../models/transferToWalletAccountDetails";
 
 enum transferType {
   IMMEDIATE = "IMMEDIATE",
@@ -23,7 +25,8 @@ interface InputDetailsState {
   templateUrl: './input-details.component.html',
   styleUrl: './input-details.component.css'
 })
-export class InputDetailsComponent {
+export class InputDetailsComponent implements OnInit {
+  protected knownAccounts: Array<TransferToWalletAccountDetails> = [];
   protected inputDetailsState: InputDetailsState = {
     toAccount: "",
     fromAccount: "",
@@ -31,7 +34,10 @@ export class InputDetailsComponent {
     transferType: transferType.IMMEDIATE,
   };
 
-  constructor(private dateService: DateFormatService) { }
+  constructor(
+    private dateService: DateFormatService,
+    private authService: AuthService,
+  ) { }
 
   get dateTime(): string {
     const currentDateTime = this.dateService.getCurrentDate();
@@ -41,5 +47,23 @@ export class InputDetailsComponent {
 
   updateInputDetailsState(partialState: Partial<InputDetailsState>) {
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
+  }
+
+  ngOnInit() {
+    const userData = this.authService.getUserData();
+    this.updateInputDetailsState({
+      fromAccount: userData.accountNumber,
+      amount: userData.availableBalance
+    });
+    this.knownAccounts = [];
+    userData.knownAccounts.forEach((account) => {
+      this.knownAccounts.push(
+        {
+          accountNumber: account.accountNumber,
+          recipientName: account.accountHolder,
+          accountType: account.accountType
+        }
+      );
+    });
   }
 }
