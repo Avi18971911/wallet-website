@@ -1,7 +1,7 @@
 import {DateFormatService} from "../../../../services/date-format.service";
 import {TransferToComponent} from "../transfer-to/transfer-to.component";
 import {Component, OnInit} from "@angular/core";
-import {TransferToWalletAccountDetails} from "../../../../models/transferToWalletAccountDetails";
+import {TransferToWalletAccountDetails} from "../../../../models/transfer-to-wallet-account-details";
 import {AccountService} from "../../../../services/account.service";
 
 enum transferType {

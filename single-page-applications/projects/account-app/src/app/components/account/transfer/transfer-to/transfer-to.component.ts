@@ -1,6 +1,6 @@
 import {Component, Input, Output} from '@angular/core';
 import {MatSelect} from "@angular/material/select";
-import {TransferToWalletAccountDetails} from "../../../../models/transferToWalletAccountDetails";
+import {TransferToWalletAccountDetails} from "../../../../models/transfer-to-wallet-account-details";
 
 @Component({
   selector: 'app-transfer-to',

@@ -18,7 +18,7 @@ import {AccountService} from "../../services/account.service";
   styleUrl: './login.component.css',
   animations: [
     trigger('shake', [
-      transition('void => *', [
+      transition('false => true', [
         animate('0.5s', keyframes([
           style({ transform: 'translateX(0)', offset: 0 }),
           style({ transform: 'translateX(-10px)', offset: 0.25 }),
@@ -35,6 +35,7 @@ export class LoginComponent {
   protected username: string = "";
   protected password: string = "";
   protected errorMessage: string = "";
+  protected triggerShake: boolean = false;
   constructor(
     private authService: AuthService,
   ) { }
@@ -52,11 +53,13 @@ export class LoginComponent {
 
   protected loginSuccessCallback: () => void =
     () => {
+      this.triggerShake = false;
       this.errorMessage = "";
     }
 
   protected loginErrorCallback: (error: any) => void =
     (error) => {
+      this.triggerShake = true;
       this.errorMessage = "Sorry, you have entered invalid credentials.";
     }
 }

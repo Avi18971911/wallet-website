@@ -9,7 +9,7 @@
       <label for="PIN">PIN</label>
       <input type="password" [(ngModel)]="password" id="PIN" name="PIN" required>
     </div>
-    <div [@shake] *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    <div [@shake]="triggerShake" (@shake.done)="triggerShake = false" class="error">{{ errorMessage }}</div>
     <button type="submit">Login</button>
   </form>
 </div>
