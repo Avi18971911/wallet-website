@@ -4,6 +4,7 @@ import {CommonModule} from "@angular/common";
 import {BalanceChartComponent} from "./balance-chart/balance-chart.component";
 import {DateFormatService} from "../../../services/date-format.service";
 import {AccountService} from "../../../services/account.service";
+import {LoadingSpinnerComponent} from "../../loading-spinner/loading-spinner.component";
 
 interface CurrentMonthAndYear {
   month: string;
@@ -13,31 +14,19 @@ interface CurrentMonthAndYear {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, BalanceChartComponent],
+  imports: [CommonModule, BalanceChartComponent, LoadingSpinnerComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  protected accountDetails: DtoAccountDetailsDTO = {
-    accountNumber: "",
-    accountType: "",
-    availableBalance: 0,
-    id: "",
-    knownAccounts: [],
-    person: {
-      firstName: "",
-      lastName: "",
-    },
-    username: "",
-    createdAt: "",
-  };
+  protected accountDetails: DtoAccountDetailsDTO | undefined;
   constructor(
     private accountService: AccountService,
     private dateService: DateFormatService,
   ) { }
 
   ngOnInit() {
-    this.accountDetails = this.accountService.getUserData();
+    this.accountDetails = this.accountService.getUserData()
   }
 
   get currentMonthAndYear(): CurrentMonthAndYear {

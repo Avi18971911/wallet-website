@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="content">
+  <div *ngIf="accountDetails; else loadingContent" class="content" >
     <div class="slim-column">
       <h2>Welcome Back</h2>
       <h1>{{accountDetails.username}}</h1>
@@ -14,4 +14,8 @@
       </div>
     </div>
   </div>
+
+  <ng-template #loadingContent>
+    <app-loading-spinner [useSpinner]="true" [message]="'Loading your account details...'" [diameter]="50"></app-loading-spinner>
+  </ng-template>
 </div>
