@@ -22,7 +22,7 @@ h2 {
   margin-right: 50px;
 }
 
-:host ::ng-deep mat-form-field {
+mat-form-field {
   width: 60%;
   margin-bottom: 16px;
 }
