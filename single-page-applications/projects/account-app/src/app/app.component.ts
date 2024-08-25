@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
         this.router.navigate([RouteNames.ACCOUNT]);
       }
       else {
+        this.accountService.clearUserData()
         this.router.navigate([RouteNames.LOGIN]);
       }
     });
