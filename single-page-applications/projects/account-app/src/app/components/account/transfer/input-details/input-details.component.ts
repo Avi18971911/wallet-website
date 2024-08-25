@@ -3,19 +3,8 @@ import {TransferToComponent} from "../transfer-to/transfer-to.component";
 import {Component, OnInit} from "@angular/core";
 import {TransferToWalletAccountDetails} from "../../../../models/transfer-to-wallet-account-details";
 import {AccountService} from "../../../../services/account.service";
-
-enum transferType {
-  IMMEDIATE = "IMMEDIATE",
-  SCHEDULED = "SCHEDULED"
-}
-
-interface InputDetailsState {
-  toAccount: string;
-  fromAccount: string;
-  amount: number;
-  transferType: transferType;
-}
-
+import {InputDetailsState, transferType} from "../../../../models/input-details-state";
+import {DtoKnownAccountDTO} from "../../../../backend-api";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -29,10 +18,10 @@ export class InputDetailsComponent implements OnInit {
   protected dateTime: string = "";
   protected knownAccounts: Array<TransferToWalletAccountDetails> = [];
   protected inputDetailsState: InputDetailsState = {
-    toAccount: "",
-    fromAccount: "",
-    amount: 0,
-    transferType: transferType.IMMEDIATE,
+    toAccount: undefined,
+    fromAccount: undefined,
+    amount: undefined,
+    transferType: undefined
   };
 
   constructor(
@@ -46,7 +35,9 @@ export class InputDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.setDateTime();
-    this.setStateFromUserData();
+    this.accountService.getKnownAccounts$().subscribe((knownAccounts => {
+      this.setStateFromKnownAccounts(knownAccounts);
+    }));
   }
 
   setDateTime() {
@@ -59,21 +50,13 @@ export class InputDetailsComponent implements OnInit {
     ${currentDateTime.time} ${currentDateTime.location}`;
   }
 
-  setStateFromUserData() {
-    const userData = this.accountService.getUserData();
-    this.updateInputDetailsState({
-      fromAccount: userData.accountNumber,
-      amount: userData.availableBalance
-    });
-    this.knownAccounts = [];
-    userData.knownAccounts.forEach((account) => {
-      this.knownAccounts.push(
-        {
-          accountNumber: account.accountNumber,
-          recipientName: account.accountHolder,
-          accountType: this.formatAccountType(account.accountType)
-        }
-      );
+  setStateFromKnownAccounts(knownAccounts: DtoKnownAccountDTO[]) {
+    this.knownAccounts = knownAccounts.map ((account) => {
+      return {
+        accountNumber: account.accountNumber,
+        recipientName: account.accountHolder,
+        accountType: this.formatAccountType(account.accountType)
+      }
     });
   }
 

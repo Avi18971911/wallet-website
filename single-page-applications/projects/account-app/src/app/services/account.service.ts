@@ -1,31 +1,40 @@
 import { Injectable } from '@angular/core';
-import {DtoAccountDetailsDTO} from "../backend-api";
+import {DtoAccountDetailsDTO, DtoKnownAccountDTO} from "../backend-api";
+import {BehaviorSubject, map, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  private userData: DtoAccountDetailsDTO = {
-    accountNumber: "",
-    accountType: "",
-    availableBalance: 0,
-    id: "",
-    knownAccounts: [],
-    person: {
-      firstName: "",
-      lastName: "",
-    },
-    username: "",
-    createdAt: "",
-  };
+  private userDataSubject: BehaviorSubject<DtoAccountDetailsDTO | undefined> = new BehaviorSubject<DtoAccountDetailsDTO | undefined>(undefined);
+  public userData$: Observable<DtoAccountDetailsDTO | undefined> = this.userDataSubject
 
   constructor() { }
 
   setUserData(data: DtoAccountDetailsDTO): void {
-    this.userData = data;
+    this.userDataSubject.next(data)
   }
 
-  getUserData(): DtoAccountDetailsDTO {
-    return this.userData;
+  clearUserData(): void {
+    this.userDataSubject.next(undefined)
   }
+
+  getKnownAccounts$(): Observable<DtoKnownAccountDTO[]> {
+    return this.userData$.pipe(
+      map((userData) => userData?.knownAccounts ?? [])
+    )
+  }
+
+  getFirstName$(): Observable<string | undefined> {
+    return this.userData$.pipe(
+      map((userData) => userData?.person.firstName)
+    )
+  }
+
+  getCurrentBalance$(): Observable<number | undefined> {
+    return this.userData$.pipe(
+      map((userData) => userData?.availableBalance)
+    )
+  }
+
 }

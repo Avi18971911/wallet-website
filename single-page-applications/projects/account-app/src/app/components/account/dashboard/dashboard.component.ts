@@ -19,14 +19,16 @@ interface CurrentMonthAndYear {
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  protected accountDetails: DtoAccountDetailsDTO | undefined;
+  protected userFirstName: string | undefined;
+  protected currentBalance: number | undefined;
   constructor(
     private accountService: AccountService,
     private dateService: DateFormatService,
   ) { }
 
   ngOnInit() {
-    this.accountDetails = this.accountService.getUserData()
+    this.accountService.getFirstName$().subscribe((firstName) => { this.userFirstName = firstName })
+    this.accountService.getCurrentBalance$().subscribe((currentBalance) => this.currentBalance = currentBalance)
   }
 
   get currentMonthAndYear(): CurrentMonthAndYear {
