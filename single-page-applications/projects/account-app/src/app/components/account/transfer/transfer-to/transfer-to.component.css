@@ -9,36 +9,34 @@ h2 {
 .row {
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
 }
 
 .underscore {
   border-bottom: 1px solid darkgrey;
+  margin-bottom: 25px;
   width: 100%;
 }
 
 .recipient {
-  flex: 2;
+  margin-right: 50px;
 }
 
-/* Apply styles to all mat-form-fields */
-mat-form-field {
-  width: 100%; /* Make form field take the full width */
-  margin-bottom: 16px; /* Add spacing between form fields */
+:host ::ng-deep mat-form-field {
+  width: 60%;
+  margin-bottom: 16px;
 }
 
-/* Style the mat-select appearance */
 .mat-form-field-outline {
-  border-radius: 4px; /* Rounded corners */
+  border-radius: 4px;
 }
 
-/* Style the mat-select placeholder */
 .mat-select-placeholder {
-  color: gray; /* Placeholder text color */
-  font-size: 14px; /* Placeholder text size */
+  color: gray;
+  font-size: 14px;
 }
 
-/* Style the mat-option text */
 .mat-option-text {
-  font-size: 14px; /* Option text size */
-  color: black; /* Option text color */
+  font-size: 14px;
+  color: black;
 }

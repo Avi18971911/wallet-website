@@ -21,6 +21,7 @@ export class TransferToComponent {
   @Output() selectedAccount: TransferToWalletAccountDetails | null = null;
 
   formatAccountDetails(accountDetails: TransferToWalletAccountDetails): string {
-    return `Wallet ${accountDetails.accountType} Account ${accountDetails.accountNumber}`;
+    return `Wallet ${accountDetails.accountType} Account ${accountDetails.accountNumber}
+    ${accountDetails.recipientName}`;
   }
 }
