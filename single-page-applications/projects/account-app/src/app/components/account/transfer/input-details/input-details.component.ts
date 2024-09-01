@@ -1,10 +1,14 @@
 import {DateFormatService} from "../../../../services/date-format.service";
 import {TransferToComponent} from "../transfer-to/transfer-to.component";
 import {Component, OnInit} from "@angular/core";
-import {TransferToWalletAccountDetails} from "../../../../models/transfer-to-wallet-account-details";
+import {
+  TransferFromWalletAccountDetails,
+  TransferToWalletAccountDetails
+} from "../../../../models/transfer-wallet-account-details";
 import {AccountService} from "../../../../services/account.service";
 import {InputDetailsState, transferType} from "../../../../models/input-details-state";
 import {DtoKnownAccountDTO} from "../../../../backend-api";
+import {CurrentAccountDetails} from "../../../../models/current-account-details";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -16,7 +20,8 @@ import {DtoKnownAccountDTO} from "../../../../backend-api";
 })
 export class InputDetailsComponent implements OnInit {
   protected dateTime: string = "";
-  protected knownAccounts: Array<TransferToWalletAccountDetails> = [];
+  protected toAccountCandidates: Array<TransferToWalletAccountDetails> = [];
+  protected fromAccountCandidates: Array<TransferFromWalletAccountDetails> = [];
   protected inputDetailsState: InputDetailsState = {
     toAccount: undefined,
     fromAccount: undefined,
@@ -35,9 +40,15 @@ export class InputDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.setDateTime();
-    this.accountService.getKnownAccounts$().subscribe((knownAccounts => {
-      this.setStateFromKnownAccounts(knownAccounts);
-    }));
+    this.accountService.getKnownAccounts$().subscribe((knownAccounts) => {
+      this.setStateToAccountCandidates(knownAccounts);
+    });
+    // TODO: Update this logic once multiple accounts owned by one person are supported
+    this.accountService.getCurrentAccountDetails$().subscribe((currentAccountDetails) => {
+      if (currentAccountDetails !== undefined) {
+        this.setStateFromAccountCandidates([currentAccountDetails]);
+      }
+    });
   }
 
   setDateTime() {
@@ -50,11 +61,21 @@ export class InputDetailsComponent implements OnInit {
     ${currentDateTime.time} ${currentDateTime.location}`;
   }
 
-  setStateFromKnownAccounts(knownAccounts: DtoKnownAccountDTO[]) {
-    this.knownAccounts = knownAccounts.map ((account) => {
+  setStateToAccountCandidates(knownAccounts: DtoKnownAccountDTO[]) {
+    this.toAccountCandidates = knownAccounts.map ((account) => {
       return {
         accountNumber: account.accountNumber,
         recipientName: account.accountHolder,
+        accountType: this.formatAccountType(account.accountType)
+      }
+    });
+  }
+
+  setStateFromAccountCandidates(knownAccounts: CurrentAccountDetails[]) {
+    this.fromAccountCandidates = knownAccounts.map ((account) => {
+      return {
+        accountNumber: account.accountNumber,
+        accountHolder: account.accountHolder,
         accountType: this.formatAccountType(account.accountType)
       }
     });

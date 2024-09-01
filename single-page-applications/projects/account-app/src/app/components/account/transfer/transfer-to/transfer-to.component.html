@@ -6,10 +6,27 @@
   <div class="row">
     <p class="recipient"><b>Recipient Account</b></p>
     <mat-form-field appearance="outline">
-      <mat-select [(value)]="selectedAccount" placeholder="Please select an account">
-        <mat-option *ngFor="let account of candidateAccountDetails" [value]="account">
+      <mat-select [(value)]="toSelectedAccount" placeholder="Please select an account">
+        <mat-option *ngFor="let account of toCandidateAccountDetails" [value]="account">
           {{ formatAccountDetails(account) }}
         </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <h2>
+    From
+  </h2>
+  <div class="underscore"></div>
+  <div class="row">
+    <p class="sender"><b>My Account</b></p>
+    <mat-form-field appearance="outline">
+      <mat-select
+        [(value)]="fromSelectedAccount"
+        placeholder="{{getDefaultFromAccount()}}">
+          <mat-option *ngFor="let account of fromCandidateAccountDetails" [value]="account">
+            {{ formatAccountDetails(account) }}
+          </mat-option>
       </mat-select>
     </mat-form-field>
   </div>

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {DtoAccountDetailsDTO, DtoKnownAccountDTO} from "../backend-api";
 import {BehaviorSubject, map, Observable} from "rxjs";
+import {CurrentAccountDetails} from "../models/current-account-details";
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +35,21 @@ export class AccountService {
   getCurrentBalance$(): Observable<number | undefined> {
     return this.userData$.pipe(
       map((userData) => userData?.availableBalance)
+    )
+  }
+
+  getCurrentAccountDetails$(): Observable<CurrentAccountDetails | undefined> {
+    return this.userData$.pipe(
+      map((userData) => {
+        if (!userData) {
+          return undefined
+        }
+        return {
+          accountNumber: userData.accountNumber,
+          accountType: userData.accountType,
+          accountHolder: `${userData.person.firstName} ${userData.person.lastName}`,
+        }
+      })
     )
   }
 

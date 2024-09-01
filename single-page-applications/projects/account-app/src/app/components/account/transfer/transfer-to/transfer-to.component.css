@@ -18,7 +18,7 @@ h2 {
   width: 100%;
 }
 
-.recipient {
+.recipient, .sender {
   margin-right: 50px;
 }
 
