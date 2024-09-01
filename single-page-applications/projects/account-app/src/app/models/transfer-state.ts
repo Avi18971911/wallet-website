@@ -3,7 +3,7 @@ export enum TransferType {
   SCHEDULED = "SCHEDULED"
 }
 
-export interface InputDetailsState {
+export interface TransferState {
   toAccount: string | undefined;
   fromAccount: string | undefined;
   amount: number | undefined;

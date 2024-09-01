@@ -6,7 +6,7 @@ import {
   TransferToWalletAccountDetails
 } from "../../../../models/transfer-wallet-account-details";
 import {AccountService} from "../../../../services/account.service";
-import {InputDetailsState, TransferType} from "../../../../models/input-details-state";
+import {TransferState, TransferType} from "../../../../models/transfer-state";
 import {DtoKnownAccountDTO} from "../../../../backend-api";
 import {CurrentAccountDetails} from "../../../../models/current-account-details";
 import {MatButtonToggle} from "@angular/material/button-toggle";
@@ -26,7 +26,7 @@ export class InputDetailsComponent implements OnInit {
   protected dateTime: string = "";
   protected toAccountCandidates: Array<TransferToWalletAccountDetails> = [];
   protected fromAccountCandidates: Array<TransferFromWalletAccountDetails> = [];
-  protected inputDetailsState: InputDetailsState = {
+  protected inputDetailsState: TransferState = {
     toAccount: undefined,
     fromAccount: undefined,
     amount: undefined,
@@ -38,7 +38,7 @@ export class InputDetailsComponent implements OnInit {
     private accountService: AccountService,
   ) { }
 
-  updateInputDetailsState(partialState: Partial<InputDetailsState>) {
+  updateInputDetailsState(partialState: Partial<TransferState>) {
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
   }
 

@@ -1,5 +1,5 @@
-import {Component, Input, Output} from '@angular/core';
-import {MatFormField, MatHint, MatLabel, MatOption, MatSelect} from "@angular/material/select";
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {MatFormField, MatHint, MatLabel, MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
 import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
@@ -8,7 +8,7 @@ import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatRadioButton, MatRadioChange, MatRadioGroup} from "@angular/material/radio";
-import {TransferType} from "../../../../models/input-details-state";
+import {TransferState, TransferType} from "../../../../models/transfer-state";
 import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
 
 @Component({
@@ -34,15 +34,42 @@ import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details
   providers: [FormatAccountDetailsPipe],
 })
 export class TransferToComponent {
+  constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
+
+  transferState: TransferState = {
+    toAccount: undefined,
+    fromAccount: undefined,
+    amount: undefined,
+    // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
+    transferType: undefined,
+  }
+
+  protected transferAmount: number = 0.00;
+
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
-  @Output() toSelectedAccount: TransferToWalletAccountDetails | undefined = undefined;
-  @Output() fromSelectedAccount: TransferFromWalletAccountDetails | undefined = undefined;
-  @Output() transferAmount: number | undefined = undefined;
-  // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
-  @Output() transferType: TransferType | undefined = undefined;
+  @Output() transferStateChange = new EventEmitter<TransferState>();
 
-  constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
+  onToAccountChange(event: MatSelectChange) {
+    const selectedAccount: TransferToWalletAccountDetails = event.value;
+    this.transferState.toAccount = selectedAccount.accountNumber;
+    this.emitTransferState();
+  }
+
+  onFromAccountChange(event: MatSelectChange) {
+    const fromAccount: TransferFromWalletAccountDetails = event.value;
+    this.transferState.fromAccount = fromAccount.accountNumber;
+    this.emitTransferState();
+  }
+
+  onTransferTypeChange(event: MatRadioChange) {
+    this.transferState.transferType = event.value;
+    this.emitTransferState();
+  }
+
+  onAmountChange() {
+    this.emitTransferState();
+  }
 
   getDefaultFromAccount(): string {
     if (this.fromCandidateAccountDetails.length > 0) {
@@ -51,8 +78,8 @@ export class TransferToComponent {
     return "Please select an account";
   }
 
-  onTransferTypeChange(event: MatRadioChange) {
-    this.transferType = event.value;
+  private emitTransferState() {
+    this.transferStateChange.emit({ ...this.transferState });
   }
 
   protected readonly TransferType = TransferType;
