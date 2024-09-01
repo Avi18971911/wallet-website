@@ -1,5 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatFormField, MatHint, MatLabel, MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
+import {
+  MatError,
+  MatFormField,
+  MatHint,
+  MatLabel,
+  MatOption,
+  MatSelect,
+  MatSelectChange
+} from "@angular/material/select";
 import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
@@ -28,6 +36,7 @@ import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details
     CurrencyPipe,
     MatHint,
     FormatAccountDetailsPipe,
+    MatError,
   ],
   templateUrl: './transfer-to.component.html',
   styleUrl: './transfer-to.component.css',
@@ -48,6 +57,7 @@ export class TransferToComponent implements OnInit {
   protected defaultFromAccount: string = "Please select an account";
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
+  @Input() hasSubmitted: boolean = false;
   @Output() transferStateChange = new EventEmitter<TransferState>();
 
   onToAccountChange(event: MatSelectChange) {

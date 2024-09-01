@@ -1,6 +1,6 @@
 import {DateFormatService} from "../../../../services/date-format.service";
 import {TransferToComponent} from "../transfer-to/transfer-to.component";
-import {Component, OnInit} from "@angular/core";
+import {Component, EventEmitter, OnInit, Optional, Output, SkipSelf} from "@angular/core";
 import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
@@ -11,6 +11,7 @@ import {DtoKnownAccountDTO} from "../../../../backend-api";
 import {CurrentAccountDetails} from "../../../../models/current-account-details";
 import {MatButtonToggle} from "@angular/material/button-toggle";
 import {MatButton} from "@angular/material/button";
+import {TransferService} from "../../../../services/transfer.service";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -24,6 +25,7 @@ import {MatButton} from "@angular/material/button";
 })
 export class InputDetailsComponent implements OnInit {
   protected dateTime: string = "";
+  protected hasSubmitted: boolean = false;
   protected toAccountCandidates: Array<TransferToWalletAccountDetails> = [];
   protected fromAccountCandidates: Array<TransferFromWalletAccountDetails> = [];
   protected inputDetailsState: TransferState = {
@@ -32,10 +34,12 @@ export class InputDetailsComponent implements OnInit {
     amount: undefined,
     transferType: undefined
   };
+  @Output() validatedTransfer = new EventEmitter<Boolean>();
 
   constructor(
     private dateService: DateFormatService,
     private accountService: AccountService,
+    @SkipSelf() private transferService: TransferService,
   ) { }
 
   updateInputDetailsState(partialState: Partial<TransferState>) {
@@ -87,5 +91,18 @@ export class InputDetailsComponent implements OnInit {
 
   formatAccountType(accountType: string): string {
     return accountType.charAt(0).toUpperCase() + accountType.substring(1).toLowerCase()
+  }
+
+  validateAndProceed() {
+    this.hasSubmitted = true;
+    if (
+      this.inputDetailsState.toAccount !== undefined &&
+      this.inputDetailsState.fromAccount !== undefined &&
+      this.inputDetailsState.amount !== undefined &&
+      this.inputDetailsState.transferType !== undefined
+    ) {
+        this.validatedTransfer.emit(true);
+        this.transferService.setTransferData(this.inputDetailsState);
+      }
   }
 }
