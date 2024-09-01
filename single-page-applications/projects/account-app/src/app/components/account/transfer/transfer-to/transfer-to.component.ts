@@ -1,14 +1,15 @@
 import {Component, Input, Output} from '@angular/core';
-import {MatFormField, MatLabel, MatOption, MatSelect} from "@angular/material/select";
+import {MatFormField, MatHint, MatLabel, MatOption, MatSelect} from "@angular/material/select";
 import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
 } from "../../../../models/transfer-wallet-account-details";
-import {NgForOf, NgIf} from "@angular/common";
+import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatRadioButton, MatRadioChange, MatRadioGroup} from "@angular/material/radio";
 import {TransferType} from "../../../../models/input-details-state";
+import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
 
 @Component({
   selector: 'app-transfer-to',
@@ -23,10 +24,14 @@ import {TransferType} from "../../../../models/input-details-state";
     MatInput,
     FormsModule,
     MatRadioGroup,
-    MatRadioButton
+    MatRadioButton,
+    CurrencyPipe,
+    MatHint,
+    FormatAccountDetailsPipe,
   ],
   templateUrl: './transfer-to.component.html',
-  styleUrl: './transfer-to.component.css'
+  styleUrl: './transfer-to.component.css',
+  providers: [FormatAccountDetailsPipe],
 })
 export class TransferToComponent {
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
@@ -37,14 +42,11 @@ export class TransferToComponent {
   // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
   @Output() transferType: TransferType | undefined = undefined;
 
-  formatAccountDetails(accountDetails: TransferToWalletAccountDetails | TransferFromWalletAccountDetails): string {
-    return `Wallet ${accountDetails.accountType} Account ${accountDetails.accountNumber}
-    ${"recipientName" in accountDetails ? accountDetails.recipientName : accountDetails.accountHolder}`;
-  }
+  constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
 
   getDefaultFromAccount(): string {
     if (this.fromCandidateAccountDetails.length > 0) {
-      return this.formatAccountDetails(this.fromCandidateAccountDetails[0]);
+      return this.formatAccountDetailsPipe.transform(this.fromCandidateAccountDetails[0]);
     }
     return "Please select an account";
   }
