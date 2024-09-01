@@ -34,6 +34,7 @@ export class TransferToComponent {
   @Output() toSelectedAccount: TransferToWalletAccountDetails | undefined = undefined;
   @Output() fromSelectedAccount: TransferFromWalletAccountDetails | undefined = undefined;
   @Output() transferAmount: number | undefined = undefined;
+  // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
   @Output() transferType: TransferType | undefined = undefined;
 
   formatAccountDetails(accountDetails: TransferToWalletAccountDetails | TransferFromWalletAccountDetails): string {

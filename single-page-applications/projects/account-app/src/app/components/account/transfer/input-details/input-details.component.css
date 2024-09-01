@@ -7,10 +7,33 @@
   flex-direction: column;
 }
 
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 40%;
+}
+
+.button {
+  margin-right: 10px;
+  flex: 1;
+  background-color: white;
+}
+
+.button:hover {
+  background-color: whitesmoke;
+  color: navy;
+}
+
 .datetime {
   color: darkgrey;
 }
 
 .header, .datetime {
   margin: 5px 0px;
+}
+
+app-transfer-to {
+  margin-bottom: 20px;
+  width: 40%;
 }

@@ -9,11 +9,15 @@ import {AccountService} from "../../../../services/account.service";
 import {InputDetailsState, TransferType} from "../../../../models/input-details-state";
 import {DtoKnownAccountDTO} from "../../../../backend-api";
 import {CurrentAccountDetails} from "../../../../models/current-account-details";
+import {MatButtonToggle} from "@angular/material/button-toggle";
+import {MatButton} from "@angular/material/button";
 @Component({
   selector: 'app-input-details',
   standalone: true,
   imports: [
-    TransferToComponent
+    TransferToComponent,
+    MatButtonToggle,
+    MatButton
   ],
   templateUrl: './input-details.component.html',
   styleUrl: './input-details.component.css'

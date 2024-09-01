@@ -25,7 +25,7 @@
               "projects/account-app/src/assets"
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/azure-blue.css",
+              "projects/account-app/src/styles.scss",
               "projects/account-app/src/styles.css"
             ],
             "scripts": [],
