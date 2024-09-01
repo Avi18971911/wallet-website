@@ -5,6 +5,10 @@ import {
   TransferToWalletAccountDetails
 } from "../../../../models/transfer-wallet-account-details";
 import {NgForOf, NgIf} from "@angular/common";
+import {MatInput} from "@angular/material/input";
+import {FormsModule} from "@angular/forms";
+import {MatRadioButton, MatRadioChange, MatRadioGroup} from "@angular/material/radio";
+import {TransferType} from "../../../../models/input-details-state";
 
 @Component({
   selector: 'app-transfer-to',
@@ -15,7 +19,11 @@ import {NgForOf, NgIf} from "@angular/common";
     NgForOf,
     MatLabel,
     MatFormField,
-    NgIf
+    NgIf,
+    MatInput,
+    FormsModule,
+    MatRadioGroup,
+    MatRadioButton
   ],
   templateUrl: './transfer-to.component.html',
   styleUrl: './transfer-to.component.css'
@@ -23,8 +31,10 @@ import {NgForOf, NgIf} from "@angular/common";
 export class TransferToComponent {
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
-  @Output() toSelectedAccount: TransferToWalletAccountDetails | null = null;
-  @Output() fromSelectedAccount: TransferFromWalletAccountDetails | null = null;
+  @Output() toSelectedAccount: TransferToWalletAccountDetails | undefined = undefined;
+  @Output() fromSelectedAccount: TransferFromWalletAccountDetails | undefined = undefined;
+  @Output() transferAmount: number | undefined = undefined;
+  @Output() transferType: TransferType | undefined = undefined;
 
   formatAccountDetails(accountDetails: TransferToWalletAccountDetails | TransferFromWalletAccountDetails): string {
     return `Wallet ${accountDetails.accountType} Account ${accountDetails.accountNumber}
@@ -38,4 +48,9 @@ export class TransferToComponent {
     return "Please select an account";
   }
 
+  onTransferTypeChange(event: MatRadioChange) {
+    this.transferType = event.value;
+  }
+
+  protected readonly TransferType = TransferType;
 }

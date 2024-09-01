@@ -4,7 +4,7 @@
   </h2>
   <div class="underscore"></div>
   <div class="row">
-    <p class="recipient"><b>Recipient Account</b></p>
+    <p class="descriptor"><b>Recipient Account</b></p>
     <mat-form-field appearance="outline">
       <mat-select [(value)]="toSelectedAccount" placeholder="Please select an account">
         <mat-option *ngFor="let account of toCandidateAccountDetails" [value]="account">
@@ -19,7 +19,7 @@
   </h2>
   <div class="underscore"></div>
   <div class="row">
-    <p class="sender"><b>My Account</b></p>
+    <p class="descriptor"><b>My Account</b></p>
     <mat-form-field appearance="outline">
       <mat-select
         [(value)]="fromSelectedAccount"
@@ -30,4 +30,19 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <div class="row">
+    <p class="descriptor"><b>Transfer Amount</b></p>
+    <mat-form-field appearance="outline">
+      <input matInput type="number" [(ngModel)]="transferAmount" placeholder="Enter amount">
+    </mat-form-field>
+  </div>
+
+  <h2>
+    Transfer Type
+  </h2>
+  <div class="underscore"></div>
+    <mat-radio-group class="column-radio-group" (change)="onTransferTypeChange($event)">
+      <mat-radio-button value="{{TransferType.IMMEDIATE}}">Immediate Transfer</mat-radio-button>
+      <mat-radio-button value="{{TransferType.SCHEDULED}}">Scheduled Transfer</mat-radio-button>
+    </mat-radio-group>
 </div>

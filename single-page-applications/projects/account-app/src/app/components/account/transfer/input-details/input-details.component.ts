@@ -6,7 +6,7 @@ import {
   TransferToWalletAccountDetails
 } from "../../../../models/transfer-wallet-account-details";
 import {AccountService} from "../../../../services/account.service";
-import {InputDetailsState, transferType} from "../../../../models/input-details-state";
+import {InputDetailsState, TransferType} from "../../../../models/input-details-state";
 import {DtoKnownAccountDTO} from "../../../../backend-api";
 import {CurrentAccountDetails} from "../../../../models/current-account-details";
 @Component({
