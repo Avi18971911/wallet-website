@@ -8,6 +8,7 @@
   <app-transfer-to
     [toCandidateAccountDetails]="toAccountCandidates"
     [fromCandidateAccountDetails]="fromAccountCandidates"
+    (transferStateChange)="updateInputDetailsState($event)"
   >
   </app-transfer-to>
 

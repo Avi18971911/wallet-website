@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatFormField, MatHint, MatLabel, MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
 import {
   TransferFromWalletAccountDetails,
@@ -33,7 +33,7 @@ import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details
   styleUrl: './transfer-to.component.css',
   providers: [FormatAccountDetailsPipe],
 })
-export class TransferToComponent {
+export class TransferToComponent implements OnInit {
   constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
 
   transferState: TransferState = {
@@ -45,7 +45,7 @@ export class TransferToComponent {
   }
 
   protected transferAmount: number = 0.00;
-
+  protected defaultFromAccount: string = "Please select an account";
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
   @Output() transferStateChange = new EventEmitter<TransferState>();
@@ -83,4 +83,13 @@ export class TransferToComponent {
   }
 
   protected readonly TransferType = TransferType;
+
+  ngOnInit() {
+    const defaultFromAccount = this.getDefaultFromAccount();
+    if (defaultFromAccount !== "Please select an account") {
+      this.transferState.fromAccount = this.fromCandidateAccountDetails[0].accountNumber;
+      this.emitTransferState()
+    }
+    this.defaultFromAccount = defaultFromAccount;
+  }
 }

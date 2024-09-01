@@ -23,7 +23,8 @@
     <mat-form-field appearance="outline">
       <mat-select
         (selectionChange)="onFromAccountChange($event)"
-        placeholder="{{getDefaultFromAccount()}}">
+        placeholder="{{defaultFromAccount}}"
+      >
           <mat-option *ngFor="let account of fromCandidateAccountDetails" [value]="account">
             {{ account | formatAccountDetails }}
           </mat-option>
