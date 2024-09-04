@@ -1,1 +1,10 @@
-<p>transfer-type works!</p>
+<div class="container">
+  <h2>
+    Transfer Type
+  </h2>
+  <div class="underscore"></div>
+  <mat-radio-group class="column-radio-group" (change)="onTransferTypeChange($event)">
+    <mat-radio-button value="{{TransferType.IMMEDIATE}}">Immediate Transfer</mat-radio-button>
+    <mat-radio-button value="{{TransferType.SCHEDULED}}">Scheduled Transfer</mat-radio-button>
+  </mat-radio-group>
+</div>

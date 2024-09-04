@@ -10,17 +10,24 @@
     <app-transfer-to
       [toCandidateAccountDetails]="toAccountCandidates"
       (transferStateChange)="updateInputDetailsState($event)"
+      hasSubmitted="{{hasSubmitted}}"
     > </app-transfer-to>
 
     <app-transfer-from
       [fromCandidateAccountDetails]="fromAccountCandidates"
       (fromAccountChange)="updateInputDetailsState($event)"
+      hasSubmitted="{{hasSubmitted}}"
     > </app-transfer-from>
 
     <app-transfer-amount
       (transferStateChange)="updateInputDetailsState($event)"
+      hasSubmitted="{{hasSubmitted}}"
     ></app-transfer-amount>
 
+    <app-transfer-type
+      (transferStateChange)="updateInputDetailsState($event)"
+      hasSubmitted="{{hasSubmitted}}"
+    ></app-transfer-type>
   </div>
 
   <div class="button-container">

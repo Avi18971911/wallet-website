@@ -14,6 +14,7 @@ import {TransferService} from "../../../../services/transfer.service";
 import {TransferFromComponent} from "../sub-components/transfer-from/transfer-from.component";
 import {TransferToComponent} from "../sub-components/transfer-to/transfer-to.component";
 import {TransferAmountComponent} from "../sub-components/transfer-amount/transfer-amount.component";
+import {TransferTypeComponent} from "../sub-components/transfer-type/transfer-type.component";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -24,7 +25,8 @@ import {TransferAmountComponent} from "../sub-components/transfer-amount/transfe
     TransferFromComponent,
     TransferFromComponent,
     TransferToComponent,
-    TransferAmountComponent
+    TransferAmountComponent,
+    TransferTypeComponent
   ],
   templateUrl: './input-details.component.html',
   styleUrl: './input-details.component.css'

@@ -12,8 +12,7 @@ import {TransferToWalletAccountDetails} from "../../../../../models/transfer-wal
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
-import {MatRadioButton, MatRadioChange, MatRadioGroup} from "@angular/material/radio";
-import {TransferState, TransferType} from "../../../../../models/transfer-state";
+import {TransferState,} from "../../../../../models/transfer-state";
 import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-details.pipe";
 
 @Component({
@@ -28,8 +27,6 @@ import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-deta
     NgIf,
     MatInput,
     FormsModule,
-    MatRadioGroup,
-    MatRadioButton,
     CurrencyPipe,
     MatHint,
     MatError,
@@ -44,11 +41,8 @@ export class TransferToComponent {
 
   transferState: Partial<TransferState> = {
     toAccount: undefined,
-    // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
-    transferType: undefined,
   }
 
-  protected transferAmount: number = 0.00;
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
   @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
@@ -59,14 +53,7 @@ export class TransferToComponent {
     this.emitTransferState();
   }
 
-  onTransferTypeChange(event: MatRadioChange) {
-    this.transferState.transferType = event.value;
-    this.emitTransferState();
-  }
-
   private emitTransferState() {
     this.transferStateChange.emit({ ...this.transferState });
   }
-
-  protected readonly TransferType = TransferType;
 }
