@@ -4,7 +4,6 @@ import {MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
 import {TransferFromWalletAccountDetails} from "../../../../models/transfer-wallet-account-details";
 import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
 import {NgForOf} from "@angular/common";
-import { TransferState } from '../../../../models/transfer-state';
 
 @Component({
   selector: 'app-transfer-from',
@@ -24,17 +23,15 @@ export class TransferFromComponent implements OnInit {
   constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
 
   protected defaultFromAccount: string = "Please select an account";
-  protected transferState: Partial<TransferState> = {
-    fromAccount: undefined,
-  }
+  protected fromAccount: string = "";
 
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
-  @Output() fromAccountChange = new EventEmitter<Partial<TransferState>>();
+  @Output() fromAccountChange = new EventEmitter<string>();
 
   onFromAccountChange(event: MatSelectChange) {
     const fromAccount: TransferFromWalletAccountDetails = event.value;
-    this.transferState.fromAccount = fromAccount.accountNumber;
+    this.fromAccount = fromAccount.accountNumber;
     this.emitFromAccountChange();
   }
 
@@ -46,13 +43,13 @@ export class TransferFromComponent implements OnInit {
   }
 
   emitFromAccountChange() {
-    this.fromAccountChange.emit(this.transferState)
+    this.fromAccountChange.emit(this.fromAccount)
   }
 
   ngOnInit() {
     const defaultFromAccount = this.getDefaultFromAccount();
     if (defaultFromAccount !== "Please select an account") {
-      this.transferState.fromAccount = this.fromCandidateAccountDetails[0].accountNumber;
+      this.fromAccount = this.fromCandidateAccountDetails[0].accountNumber;
       this.emitFromAccountChange()
     }
     this.defaultFromAccount = defaultFromAccount;
