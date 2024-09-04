@@ -48,10 +48,6 @@ export class InputDetailsComponent implements OnInit {
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
   }
 
-  updateInputDetailsFromAccount(accountNumber: string) {
-    this.updateInputDetailsState({fromAccount: accountNumber});
-  }
-
   ngOnInit() {
     this.setDateTime();
     this.accountService.getKnownAccounts$().subscribe((knownAccounts) => {
