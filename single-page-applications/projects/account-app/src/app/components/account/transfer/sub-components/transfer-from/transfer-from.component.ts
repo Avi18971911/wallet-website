@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatFormField} from "@angular/material/form-field";
 import {MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
-import {TransferFromWalletAccountDetails} from "../../../../models/transfer-wallet-account-details";
-import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
+import {TransferFromWalletAccountDetails} from "../../../../../models/transfer-wallet-account-details";
+import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-details.pipe";
 import {NgForOf} from "@angular/common";
-import { TransferState } from '../../../../models/transfer-state';
+import { TransferState } from '../../../../../models/transfer-state';
 
 @Component({
   selector: 'app-transfer-from',

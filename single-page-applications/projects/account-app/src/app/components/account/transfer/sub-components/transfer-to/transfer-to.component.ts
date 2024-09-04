@@ -8,16 +8,13 @@ import {
   MatSelect,
   MatSelectChange
 } from "@angular/material/select";
-import {
-  TransferFromWalletAccountDetails,
-  TransferToWalletAccountDetails
-} from "../../../../models/transfer-wallet-account-details";
+import {TransferToWalletAccountDetails} from "../../../../../models/transfer-wallet-account-details";
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {MatInput} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatRadioButton, MatRadioChange, MatRadioGroup} from "@angular/material/radio";
-import {TransferState, TransferType} from "../../../../models/transfer-state";
-import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
+import {TransferState, TransferType} from "../../../../../models/transfer-state";
+import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-details.pipe";
 
 @Component({
   selector: 'app-transfer-to',
@@ -35,19 +32,18 @@ import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details
     MatRadioButton,
     CurrencyPipe,
     MatHint,
-    FormatAccountDetailsPipe,
     MatError,
+    FormatAccountDetailsPipe,
   ],
   templateUrl: './transfer-to.component.html',
   styleUrl: './transfer-to.component.css',
+  providers: [FormatAccountDetailsPipe],
 })
 export class TransferToComponent {
-  constructor() {}
+  constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
 
-  transferState: TransferState = {
+  transferState: Partial<TransferState> = {
     toAccount: undefined,
-    fromAccount: undefined,
-    amount: undefined,
     // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
     transferType: undefined,
   }
@@ -55,7 +51,7 @@ export class TransferToComponent {
   protected transferAmount: number = 0.00;
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
-  @Output() transferStateChange = new EventEmitter<TransferState>();
+  @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
 
   onToAccountChange(event: MatSelectChange) {
     const selectedAccount: TransferToWalletAccountDetails = event.value;
@@ -65,10 +61,6 @@ export class TransferToComponent {
 
   onTransferTypeChange(event: MatRadioChange) {
     this.transferState.transferType = event.value;
-    this.emitTransferState();
-  }
-
-  onAmountChange() {
     this.emitTransferState();
   }
 

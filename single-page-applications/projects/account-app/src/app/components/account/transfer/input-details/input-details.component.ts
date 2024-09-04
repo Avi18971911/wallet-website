@@ -1,5 +1,4 @@
 import {DateFormatService} from "../../../../services/date-format.service";
-import {TransferToComponent} from "../transfer-to/transfer-to.component";
 import {Component, EventEmitter, OnInit, Optional, Output, SkipSelf} from "@angular/core";
 import {
   TransferFromWalletAccountDetails,
@@ -12,7 +11,9 @@ import {CurrentAccountDetails} from "../../../../models/current-account-details"
 import {MatButtonToggle} from "@angular/material/button-toggle";
 import {MatButton} from "@angular/material/button";
 import {TransferService} from "../../../../services/transfer.service";
-import {TransferFromComponent} from "../transfer-from/transfer-from.component";
+import {TransferFromComponent} from "../sub-components/transfer-from/transfer-from.component";
+import {TransferToComponent} from "../sub-components/transfer-to/transfer-to.component";
+import {TransferAmountComponent} from "../sub-components/transfer-amount/transfer-amount.component";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -20,7 +21,10 @@ import {TransferFromComponent} from "../transfer-from/transfer-from.component";
     TransferToComponent,
     MatButtonToggle,
     MatButton,
-    TransferFromComponent
+    TransferFromComponent,
+    TransferFromComponent,
+    TransferToComponent,
+    TransferAmountComponent
   ],
   templateUrl: './input-details.component.html',
   styleUrl: './input-details.component.css'

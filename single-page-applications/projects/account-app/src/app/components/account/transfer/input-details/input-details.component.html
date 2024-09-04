@@ -16,6 +16,11 @@
       [fromCandidateAccountDetails]="fromAccountCandidates"
       (fromAccountChange)="updateInputDetailsState($event)"
     > </app-transfer-from>
+
+    <app-transfer-amount
+      (transferStateChange)="updateInputDetailsState($event)"
+    ></app-transfer-amount>
+
   </div>
 
   <div class="button-container">
