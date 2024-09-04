@@ -14,24 +14,6 @@
     </mat-form-field>
   </div>
 
-  <h2>
-    From
-  </h2>
-  <div class="underscore"></div>
-  <div class="row">
-    <p class="descriptor"><b>My Account</b></p>
-    <mat-form-field appearance="outline">
-      <mat-select
-        (selectionChange)="onFromAccountChange($event)"
-        placeholder="{{defaultFromAccount}}"
-      >
-          <mat-option *ngFor="let account of fromCandidateAccountDetails" [value]="account">
-            {{ account | formatAccountDetails }}
-          </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
   <div class="row">
     <p class="descriptor"><b>Transfer Amount</b></p>
     <mat-form-field appearance="outline">

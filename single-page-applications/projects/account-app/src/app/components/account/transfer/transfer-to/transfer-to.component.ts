@@ -40,10 +40,9 @@ import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details
   ],
   templateUrl: './transfer-to.component.html',
   styleUrl: './transfer-to.component.css',
-  providers: [FormatAccountDetailsPipe],
 })
-export class TransferToComponent implements OnInit {
-  constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
+export class TransferToComponent {
+  constructor() {}
 
   transferState: TransferState = {
     toAccount: undefined,
@@ -54,21 +53,13 @@ export class TransferToComponent implements OnInit {
   }
 
   protected transferAmount: number = 0.00;
-  protected defaultFromAccount: string = "Please select an account";
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
-  @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
   @Output() transferStateChange = new EventEmitter<TransferState>();
 
   onToAccountChange(event: MatSelectChange) {
     const selectedAccount: TransferToWalletAccountDetails = event.value;
     this.transferState.toAccount = selectedAccount.accountNumber;
-    this.emitTransferState();
-  }
-
-  onFromAccountChange(event: MatSelectChange) {
-    const fromAccount: TransferFromWalletAccountDetails = event.value;
-    this.transferState.fromAccount = fromAccount.accountNumber;
     this.emitTransferState();
   }
 
@@ -81,25 +72,9 @@ export class TransferToComponent implements OnInit {
     this.emitTransferState();
   }
 
-  getDefaultFromAccount(): string {
-    if (this.fromCandidateAccountDetails.length > 0) {
-      return this.formatAccountDetailsPipe.transform(this.fromCandidateAccountDetails[0]);
-    }
-    return "Please select an account";
-  }
-
   private emitTransferState() {
     this.transferStateChange.emit({ ...this.transferState });
   }
 
   protected readonly TransferType = TransferType;
-
-  ngOnInit() {
-    const defaultFromAccount = this.getDefaultFromAccount();
-    if (defaultFromAccount !== "Please select an account") {
-      this.transferState.fromAccount = this.fromCandidateAccountDetails[0].accountNumber;
-      this.emitTransferState()
-    }
-    this.defaultFromAccount = defaultFromAccount;
-  }
 }

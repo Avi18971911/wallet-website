@@ -12,13 +12,15 @@ import {CurrentAccountDetails} from "../../../../models/current-account-details"
 import {MatButtonToggle} from "@angular/material/button-toggle";
 import {MatButton} from "@angular/material/button";
 import {TransferService} from "../../../../services/transfer.service";
+import {TransferFromComponent} from "../transfer-from/transfer-from.component";
 @Component({
   selector: 'app-input-details',
   standalone: true,
   imports: [
     TransferToComponent,
     MatButtonToggle,
-    MatButton
+    MatButton,
+    TransferFromComponent
   ],
   templateUrl: './input-details.component.html',
   styleUrl: './input-details.component.css'

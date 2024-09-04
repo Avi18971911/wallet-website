@@ -1,9 +1,9 @@
 h2 {
-  color: #414141;
+  color: var(--primary-color);
 }
 
 .container {
-  width: 100%;
+  width: var(--width-full);
 }
 
 .row {
@@ -19,30 +19,30 @@ h2 {
 }
 
 .underscore {
-  border-bottom: 1px solid darkgrey;
+  border-bottom: 1px solid var(--secondary-color);
   margin-bottom: 25px;
-  width: 100%;
+  width: var(--width-full);
 }
 
 .descriptor {
-  margin-right: 50px;
+  margin-right: var(--margin-right);
 }
 
 mat-form-field {
-  width: 60%;
-  margin-bottom: 16px;
+  width: var(--width-large);
+  margin-bottom: var(--margin-bottom);
 }
 
 .mat-form-field-outline {
-  border-radius: 4px;
+  border-radius: var(--border-radius);
 }
 
 .mat-select-placeholder {
-  color: gray;
-  font-size: 14px;
+  color: var(--text-gray);
+  font-size: var(--font-size-small);
 }
 
 .mat-option-text {
-  font-size: 14px;
+  font-size: var(--font-size-small);
   color: black;
 }

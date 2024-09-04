@@ -5,12 +5,18 @@
   <p class="datetime">
     {{ dateTime }}
   </p>
-  <app-transfer-to
-    [toCandidateAccountDetails]="toAccountCandidates"
-    [fromCandidateAccountDetails]="fromAccountCandidates"
-    (transferStateChange)="updateInputDetailsState($event)"
-  >
-  </app-transfer-to>
+
+  <div class="components">
+    <app-transfer-to
+      [toCandidateAccountDetails]="toAccountCandidates"
+      (transferStateChange)="updateInputDetailsState($event)"
+    > </app-transfer-to>
+
+    <app-transfer-from
+      [fromCandidateAccountDetails]="fromAccountCandidates"
+      (fromAccountChange)="updateInputDetailsState($event)"
+    > </app-transfer-from>
+  </div>
 
   <div class="button-container">
     <button mat-button class="button" (click)="validateAndProceed()">
