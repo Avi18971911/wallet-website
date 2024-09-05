@@ -3,6 +3,8 @@ import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angula
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {TransferState} from "../../../../../models/transfer-state";
+import {NgIf} from "@angular/common";
+import {MatError} from "@angular/material/select";
 
 @Component({
   selector: 'app-transfer-amount',
@@ -11,7 +13,9 @@ import {TransferState} from "../../../../../models/transfer-state";
     FormsModule,
     MatFormField,
     MatInput,
-    ReactiveFormsModule
+    MatError,
+    ReactiveFormsModule,
+    NgIf
   ],
   templateUrl: './transfer-amount.component.html',
   styleUrl: './transfer-amount.component.css'
