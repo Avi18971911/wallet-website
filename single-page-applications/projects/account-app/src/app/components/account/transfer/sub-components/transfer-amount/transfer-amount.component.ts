@@ -49,5 +49,6 @@ export class TransferAmountComponent implements OnInit {
       this.transferState.amount = this.roundAndEnforcePattern(value);
       this.emitTransferState();
     });
+    this.amountControl.markAsTouched({ onlySelf: true });
   }
 }

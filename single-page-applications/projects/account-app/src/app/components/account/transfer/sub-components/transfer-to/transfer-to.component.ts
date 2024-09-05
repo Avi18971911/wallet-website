@@ -60,5 +60,6 @@ export class TransferToComponent implements OnInit {
       this.transferState.toAccount = value ?? undefined;
       this.emitTransferState();
     });
+    this.toControl.markAsTouched({onlySelf: true});
   }
 }
