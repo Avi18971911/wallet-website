@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {FormsModule} from "@angular/forms";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {TransferState} from "../../../../../models/transfer-state";
@@ -10,15 +10,21 @@ import {TransferState} from "../../../../../models/transfer-state";
   imports: [
     FormsModule,
     MatFormField,
-    MatInput
+    MatInput,
+    ReactiveFormsModule
   ],
   templateUrl: './transfer-amount.component.html',
   styleUrl: './transfer-amount.component.css'
 })
-export class TransferAmountComponent {
+export class TransferAmountComponent implements OnInit {
   protected transferState: Partial<TransferState> = {
     amount: undefined,
   };
+  protected amountControl = new FormControl('', [
+    Validators.required,
+    Validators.pattern(/^\d+(\.\d{1,2})?$/), // Enforce NUMBER.NUMBER to two cents pattern
+    Validators.min(0.01),
+  ]);
 
   @Input() hasSubmitted: boolean = false;
   @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
@@ -28,5 +34,23 @@ export class TransferAmountComponent {
 
   private emitTransferState() {
     this.transferStateChange.emit({ ...this.transferState });
+  }
+
+  private roundAndEnforcePattern(value: string | null): string {
+    if (!value) return '';
+
+    const numValue = parseFloat(value);
+    const roundedValue = Math.ceil(numValue * 100) / 100;
+
+    return roundedValue.toFixed(2);
+  }
+
+
+  ngOnInit() {
+    this.amountControl.valueChanges.subscribe((value) => {
+      const roundedValue = this.roundAndEnforcePattern(value);
+      this.transferState.amount = roundedValue ? parseFloat(roundedValue) : undefined;
+      this.emitTransferState();
+    });
   }
 }

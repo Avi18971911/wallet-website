@@ -2,10 +2,7 @@
   <div class="row">
     <p class="descriptor"><b>Transfer Amount</b></p>
     <mat-form-field appearance="outline">
-      <input
-        matInput type="number" [(ngModel)]="transferState.amount"
-        (ngModelChange)="onAmountChange()" placeholder="Enter amount"
-      >
+      <input matInput type="number" [formControl]="amountControl" placeholder="Enter amount">
     </mat-form-field>
   </div>
 </div>
