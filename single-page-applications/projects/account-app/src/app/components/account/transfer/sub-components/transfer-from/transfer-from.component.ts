@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatFormField} from "@angular/material/form-field";
-import {MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
+import {MatError, MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
 import {TransferFromWalletAccountDetails} from "../../../../../models/transfer-wallet-account-details";
 import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-details.pipe";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import { TransferState } from '../../../../../models/transfer-state';
+import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-transfer-from',
@@ -14,7 +15,10 @@ import { TransferState } from '../../../../../models/transfer-state';
     MatSelect,
     MatOption,
     FormatAccountDetailsPipe,
-    NgForOf
+    NgForOf,
+    ReactiveFormsModule,
+    MatError,
+    NgIf
   ],
   templateUrl: './transfer-from.component.html',
   styleUrl: './transfer-from.component.css',
@@ -32,11 +36,9 @@ export class TransferFromComponent implements OnInit {
   @Input() hasSubmitted: boolean = false;
   @Output() fromAccountChange = new EventEmitter<Partial<TransferState>>();
 
-  onFromAccountChange(event: MatSelectChange) {
-    const fromAccount: TransferFromWalletAccountDetails = event.value;
-    this.transferState.fromAccount = fromAccount.accountNumber;
-    this.emitFromAccountChange();
-  }
+  protected fromControl = new FormControl(this.transferState.fromAccount, [
+    Validators.required,
+  ]);
 
   getDefaultFromAccount(): string {
     if (this.fromCandidateAccountDetails.length > 0) {
@@ -56,5 +58,10 @@ export class TransferFromComponent implements OnInit {
       this.emitFromAccountChange()
     }
     this.defaultFromAccount = defaultFromAccount;
+
+    this.fromControl.valueChanges.subscribe((value) => {
+      this.transferState.fromAccount = value ?? undefined;
+      this.emitFromAccountChange();
+    });
   }
 }

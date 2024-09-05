@@ -7,13 +7,17 @@
     <p class="descriptor"><b>My Account</b></p>
     <mat-form-field appearance="outline">
       <mat-select
-        (selectionChange)="onFromAccountChange($event)"
         placeholder="{{defaultFromAccount}}"
+        [formControl]="fromControl"
       >
         <mat-option *ngFor="let account of fromCandidateAccountDetails" [value]="account">
           {{ account | formatAccountDetails }}
         </mat-option>
       </mat-select>
+      <!-- Error messages -->
+      <mat-error *ngIf="hasSubmitted && fromControl.hasError('required')">
+        From account is required.
+      </mat-error>
     </mat-form-field>
   </div>
 </div>

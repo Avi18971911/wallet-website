@@ -3,7 +3,6 @@
     <p class="descriptor"><b>Transfer Amount</b></p>
     <mat-form-field appearance="outline">
       <input matInput type="number" [formControl]="amountControl" placeholder="Enter amount">
-
       <!-- Error messages -->
       <mat-error *ngIf="hasSubmitted && amountControl.hasError('required')">
         Amount is required.

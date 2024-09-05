@@ -51,7 +51,10 @@ export class InputDetailsComponent implements OnInit {
   ) { }
 
   updateInputDetailsState(partialState: Partial<TransferState>) {
+    console.log("partial state", partialState);
+    console.log("input details state", this.inputDetailsState);
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
+    console.log("updated input details state", this.inputDetailsState);
   }
 
   ngOnInit() {

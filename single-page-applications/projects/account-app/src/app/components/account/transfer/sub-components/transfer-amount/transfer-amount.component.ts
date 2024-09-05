@@ -24,7 +24,7 @@ export class TransferAmountComponent implements OnInit {
   protected transferState: Partial<TransferState> = {
     amount: undefined,
   };
-  protected amountControl = new FormControl('', [
+  protected amountControl = new FormControl(this.transferState.amount, [
     Validators.required,
     Validators.pattern(/^\d+(\.\d{1,2})?$/), // Enforce NUMBER.NUMBER to two cents pattern
     Validators.min(0.01),
@@ -32,28 +32,21 @@ export class TransferAmountComponent implements OnInit {
 
   @Input() hasSubmitted: boolean = false;
   @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
-  onAmountChange() {
-    this.emitTransferState();
-  }
 
   private emitTransferState() {
     this.transferStateChange.emit({ ...this.transferState });
   }
 
-  private roundAndEnforcePattern(value: string | null): string {
-    if (!value) return '';
-
-    const numValue = parseFloat(value);
-    const roundedValue = Math.ceil(numValue * 100) / 100;
-
-    return roundedValue.toFixed(2);
+  private roundAndEnforcePattern(value: number | null | undefined): number | undefined {
+    if (!value) return undefined;
+    const roundedValue = Math.ceil(value * 100) / 100;
+    return parseFloat(roundedValue.toFixed(2));
   }
 
 
   ngOnInit() {
     this.amountControl.valueChanges.subscribe((value) => {
-      const roundedValue = this.roundAndEnforcePattern(value);
-      this.transferState.amount = roundedValue ? parseFloat(roundedValue) : undefined;
+      this.transferState.amount = this.roundAndEnforcePattern(value);
       this.emitTransferState();
     });
   }
