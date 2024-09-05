@@ -7,8 +7,10 @@
     <mat-radio-button value="{{TransferType.IMMEDIATE}}">Immediate Transfer</mat-radio-button>
     <mat-radio-button value="{{TransferType.SCHEDULED}}">Scheduled Transfer</mat-radio-button>
     <!-- Error messages -->
+  </mat-radio-group>
+  <div class="error">
     <mat-error *ngIf="hasSubmitted && typeControl.hasError('required')">
       Transfer type is required.
     </mat-error>
-  </mat-radio-group>
+  </div>
 </div>

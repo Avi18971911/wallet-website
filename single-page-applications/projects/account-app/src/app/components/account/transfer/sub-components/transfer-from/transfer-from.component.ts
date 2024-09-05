@@ -54,6 +54,7 @@ export class TransferFromComponent implements OnInit {
   ngOnInit() {
     const defaultFromAccount = this.getDefaultFromAccount();
     if (defaultFromAccount !== "Please select an account") {
+      this.fromControl.setValue(this.fromCandidateAccountDetails[0].accountNumber);
       this.transferState.fromAccount = this.fromCandidateAccountDetails[0].accountNumber;
       this.emitFromAccountChange()
     }
