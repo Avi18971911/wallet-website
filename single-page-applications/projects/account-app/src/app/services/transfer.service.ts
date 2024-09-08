@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {TransferState} from "../models/transfer-state";
+import {Subject} from "rxjs";
 
 export interface TransferData {
   toAccount: string;
@@ -12,6 +13,7 @@ export interface TransferData {
 })
 export class TransferService {
   protected transferData: TransferData | undefined;
+  transferValidated = new Subject<void>()
   constructor() { }
 
   setTransferData(transferState: TransferState): void {
@@ -20,5 +22,6 @@ export class TransferService {
       fromAccount: transferState.fromAccount!,
       amount: transferState.amount!
     }
+    this.transferValidated.next()
   }
 }

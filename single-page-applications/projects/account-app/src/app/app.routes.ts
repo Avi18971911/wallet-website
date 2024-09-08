@@ -5,6 +5,7 @@ import {DashboardComponent} from "./components/account/dashboard/dashboard.compo
 import {TransferWalletBankComponent} from "./components/account/transfer/transfer-wallet-bank.component";
 import {InputDetailsComponent} from "./components/account/transfer/input-details/input-details.component";
 import {RouteNames} from "./route-names";
+import {VerifyDetailsComponent} from "./components/account/transfer/verify-details/verify-details.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/login", pathMatch: "full" },
@@ -21,7 +22,8 @@ export const routes: Routes = [
             path: RouteNames.OTHER_WALLETBANK,
             component: TransferWalletBankComponent,
             children: [
-              {path: 'input-details', component: InputDetailsComponent}
+              {path: RouteNames.INPUT_DETAILS, component: InputDetailsComponent},
+              {path: RouteNames.VERIFY_DETAILS, component: VerifyDetailsComponent}
             ],
           }
         ]

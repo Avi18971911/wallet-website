@@ -31,7 +31,11 @@ export class HeaderComponent {
   ];
   protected transferMenuItems: MenuItem[] = [
     {label: 'To My Accounts', link: [RouteNames.TRANSFER, 'to-my-accounts']},
-    {label: 'To Other WalletBank Accounts', link: [RouteNames.TRANSFER, RouteNames.OTHER_WALLETBANK]},
+    {label: 'To Other WalletBank Accounts', link: [
+      RouteNames.TRANSFER,
+      RouteNames.OTHER_WALLETBANK,
+      RouteNames.INPUT_DETAILS
+    ]},
     {label: 'To Other Banks', link: [RouteNames.TRANSFER, 'to-other-banks']},
   ];
 }

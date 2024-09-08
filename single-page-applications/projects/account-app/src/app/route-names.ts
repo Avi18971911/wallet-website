@@ -4,4 +4,6 @@ export enum RouteNames {
   DASHBOARD = 'dashboard',
   TRANSFER = 'transfer',
   OTHER_WALLETBANK = 'to-other-walletbank',
+  INPUT_DETAILS = 'input-details',
+  VERIFY_DETAILS = 'verify-details',
 }

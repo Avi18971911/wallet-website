@@ -44,7 +44,6 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     amount: undefined,
     transferType: undefined
   };
-  @Output() validatedTransfer = new EventEmitter<Boolean>();
 
   constructor(
     private dateService: DateFormatService,
@@ -118,7 +117,6 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
       this.inputDetailsState.amount !== undefined &&
       this.inputDetailsState.transferType !== undefined
     ) {
-        this.validatedTransfer.emit(true);
         this.transferService.setTransferData(this.inputDetailsState);
       }
   }
