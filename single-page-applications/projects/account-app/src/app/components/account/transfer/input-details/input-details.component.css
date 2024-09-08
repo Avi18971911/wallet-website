@@ -10,15 +10,6 @@
   --width-large: 60%;
 }
 
-.container {
-  position: relative;
-  top: 20px;
-  left: 20px;
-  display: flex;
-  width: 80%;
-  flex-direction: column;
-}
-
 .button-container {
   display: flex;
   flex-direction: row;
@@ -35,14 +26,6 @@
 .button:hover {
   background-color: whitesmoke;
   color: navy;
-}
-
-.datetime {
-  color: darkgrey;
-}
-
-.header, .datetime {
-  margin: 5px 0px;
 }
 
 .components {

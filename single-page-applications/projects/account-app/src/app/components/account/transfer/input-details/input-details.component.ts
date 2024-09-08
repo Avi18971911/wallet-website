@@ -46,20 +46,15 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private dateService: DateFormatService,
     private accountService: AccountService,
     @SkipSelf() private transferService: TransferService,
   ) { }
 
   updateInputDetailsState(partialState: Partial<TransferState>) {
-    console.log("partial state", partialState);
-    console.log("input details state", this.inputDetailsState);
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
-    console.log("updated input details state", this.inputDetailsState);
   }
 
   ngOnInit() {
-    this.setDateTime();
     this.accountService.getKnownAccounts$()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((knownAccounts) => {
@@ -73,16 +68,6 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
           this.setStateFromAccountCandidates([currentAccountDetails]);
         }
       });
-  }
-
-  setDateTime() {
-    this.dateTime = this.getDateTime()
-  }
-
-  getDateTime(): string {
-    const currentDateTime = this.dateService.getCurrentDate();
-    return `${currentDateTime.day} ${currentDateTime.month} ${currentDateTime.year}
-    ${currentDateTime.time} ${currentDateTime.location}`;
   }
 
   setStateToAccountCandidates(knownAccounts: DtoKnownAccountDTO[]) {

@@ -5,6 +5,7 @@ import {AccountService} from "../../../services/account.service";
 import {TransferService} from "../../../services/transfer.service";
 import {filter, Subject, Subscription, takeUntil} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {DateFormatService} from "../../../services/date-format.service";
 
 @Component({
   selector: 'app-transfer',
@@ -21,12 +22,15 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router, private route: ActivatedRoute,
     private transferService: TransferService,
+    private dateService: DateFormatService,
   ) {}
   private ngUnsubscribe = new Subject<void>();
   protected currentStep: number = 1;
+  protected dateTime: string = "";
 
   ngOnInit() {
     this.navigateToInputDetails()
+    this.setDateTime()
 
     this.transferService.transferValidated
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -54,4 +58,15 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
       console.error(error);
     });
   }
+
+  private setDateTime() {
+    this.dateTime = this.getDateTime()
+  }
+
+  private getDateTime(): string {
+    const currentDateTime = this.dateService.getCurrentDate();
+    return `${currentDateTime.day} ${currentDateTime.month} ${currentDateTime.year}
+    ${currentDateTime.time} ${currentDateTime.location}`;
+  }
+
 }
