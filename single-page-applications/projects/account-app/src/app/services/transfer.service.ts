@@ -1,27 +1,51 @@
 import { Injectable } from '@angular/core';
 import {TransferState} from "../models/transfer-state";
-import {Subject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 
 export interface TransferData {
   toAccount: string;
   fromAccount: string;
   amount: number;
+  recipientName: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TransferService {
-  protected transferData: TransferData | undefined;
+  private transferSubject = new BehaviorSubject<TransferData | undefined>(undefined);
+  private transferData$ = this.transferSubject.asObservable();
   transferValidated = new Subject<void>()
   constructor() { }
 
   setTransferData(transferState: TransferState): void {
-    this.transferData = {
+    if (!this.isTransferStateValid(transferState)) {
+      console.error('Invalid transfer data.');
+      return;
+    }
+
+    const transferData: TransferData = {
       toAccount: transferState.toAccount!,
       fromAccount: transferState.fromAccount!,
-      amount: transferState.amount!
+      amount: transferState.amount!,
+      recipientName: transferState.recipientName!,
     }
     this.transferValidated.next()
+    this.transferSubject.next(transferData)
+  }
+
+  clearTransferData(): void {
+    this.transferSubject.next(undefined)
+  }
+
+  getTransferData() {
+    return this.transferData$
+  }
+
+  private isTransferStateValid(transferState: TransferState): boolean {
+    return !!(
+      transferState.toAccount &&
+      transferState.fromAccount &&
+      transferState.amount &&
+      transferState.recipientName
+    );
   }
 }

@@ -15,4 +15,10 @@ export class FormatAccountDetailsPipe implements PipeTransform {
     ${"recipientName" in accountDetails ? accountDetails.recipientName : accountDetails.accountHolder}`;
   }
 
+  transformAccountNumberWithType(
+    accountDetails: TransferFromWalletAccountDetails | TransferToWalletAccountDetails
+  ): string {
+    return `Wallet ${accountDetails.accountType} Account ${accountDetails.accountNumber}`;
+  }
+
 }

@@ -41,7 +41,8 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     toAccount: undefined,
     fromAccount: undefined,
     amount: undefined,
-    transferType: undefined
+    transferType: undefined,
+    recipientName: undefined,
   };
 
   constructor(
@@ -50,7 +51,10 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   updateInputDetailsState(partialState: Partial<TransferState>) {
+    console.log('Partial state:', partialState);
+    console.log('Current state:', this.inputDetailsState);
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
+    console.log('Input details state:', this.inputDetailsState);
   }
 
   ngOnInit() {
@@ -99,7 +103,8 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
       this.inputDetailsState.toAccount !== undefined &&
       this.inputDetailsState.fromAccount !== undefined &&
       this.inputDetailsState.amount !== undefined &&
-      this.inputDetailsState.transferType !== undefined
+      this.inputDetailsState.transferType !== undefined &&
+      this.inputDetailsState.recipientName !== undefined
     ) {
         this.transferService.setTransferData(this.inputDetailsState);
       }

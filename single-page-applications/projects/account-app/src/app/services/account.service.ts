@@ -7,7 +7,8 @@ import {CurrentAccountDetails} from "../models/current-account-details";
   providedIn: 'root'
 })
 export class AccountService {
-  private userDataSubject: BehaviorSubject<DtoAccountDetailsDTO | undefined> = new BehaviorSubject<DtoAccountDetailsDTO | undefined>(undefined);
+  private userDataSubject: BehaviorSubject<DtoAccountDetailsDTO | undefined> =
+    new BehaviorSubject<DtoAccountDetailsDTO | undefined>(undefined);
   public userData$: Observable<DtoAccountDetailsDTO | undefined> = this.userDataSubject
 
   constructor() { }

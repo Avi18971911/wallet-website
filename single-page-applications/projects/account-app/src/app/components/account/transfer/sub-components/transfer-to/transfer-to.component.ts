@@ -44,14 +44,18 @@ export class TransferToComponent implements OnInit, OnDestroy, OnChanges {
 
   transferState: Partial<TransferState> = {
     toAccount: undefined,
+    recipientName: undefined,
   }
 
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
   @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
-  protected toControl = new FormControl(this.transferState.toAccount, [
-    Validators.required,
-  ]);
+  protected toControl = new FormControl<TransferToWalletAccountDetails | undefined>(
+    undefined,
+    [
+      Validators.required,
+    ]
+  );
 
   private emitTransferState() {
     this.transferStateChange.emit({ ...this.transferState });
@@ -61,7 +65,9 @@ export class TransferToComponent implements OnInit, OnDestroy, OnChanges {
     this.toControl.valueChanges
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((value) => {
-        this.transferState.toAccount = value ?? undefined;
+        this.transferState.toAccount =
+          value ? this.formatAccountDetailsPipe.transformAccountNumberWithType(value) : undefined;
+        this.transferState.recipientName = value?.recipientName ?? undefined;
         this.emitTransferState();
       });
   }

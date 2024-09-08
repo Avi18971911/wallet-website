@@ -37,33 +37,39 @@ export class TransferFromComponent implements OnInit, OnDestroy {
   @Input() hasSubmitted: boolean = false;
   @Output() fromAccountChange = new EventEmitter<Partial<TransferState>>();
 
-  protected fromControl = new FormControl(this.transferState.fromAccount, [
-    Validators.required,
-  ]);
+  protected fromControl = new FormControl<TransferFromWalletAccountDetails | undefined>(
+    undefined,
+    [
+      Validators.required,
+    ]
+  );
 
-  getDefaultFromAccount(): string {
+  private getDefaultFromAccount(): string {
     if (this.fromCandidateAccountDetails.length > 0) {
       return this.formatAccountDetailsPipe.transform(this.fromCandidateAccountDetails[0]);
     }
     return "Please select an account";
   }
 
-  emitFromAccountChange() {
+  private emitFromAccountChange() {
     this.fromAccountChange.emit(this.transferState)
   }
 
   ngOnInit() {
     const defaultFromAccount = this.getDefaultFromAccount();
     if (defaultFromAccount !== "Please select an account") {
-      this.fromControl.setValue(this.fromCandidateAccountDetails[0].accountNumber);
-      this.transferState.fromAccount = this.fromCandidateAccountDetails[0].accountNumber;
+      this.fromControl.setValue(this.fromCandidateAccountDetails[0]);
+      this.transferState.fromAccount = this.formatAccountDetailsPipe.transformAccountNumberWithType(
+        this.fromCandidateAccountDetails[0]
+      );
       this.emitFromAccountChange()
     }
     this.defaultFromAccount = defaultFromAccount;
 
     this.fromControl.valueChanges
       .subscribe((value) => {
-        this.transferState.fromAccount = value ?? undefined;
+        this.transferState.fromAccount =
+          value ? this.formatAccountDetailsPipe.transformAccountNumberWithType(value) : undefined;
         this.emitFromAccountChange();
       });
   }
