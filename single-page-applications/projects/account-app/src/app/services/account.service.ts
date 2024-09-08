@@ -3,25 +3,42 @@ import {DtoAccountDetailsDTO, DtoKnownAccountDTO} from "../backend-api";
 import {BehaviorSubject, map, Observable} from "rxjs";
 import {CurrentAccountDetails} from "../models/current-account-details";
 
+export interface KnownAccount {
+  accountNumber: string;
+  accountHolder: string;
+  accountType: string;
+}
+
+export interface AccountDetails {
+  accountNumber: string;
+  accountType: string;
+  accountHolderFirstName: string;
+  accountHolderLastName: string;
+  availableBalance: number;
+  accountId: string;
+  knownAccounts: KnownAccount[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  private userDataSubject: BehaviorSubject<DtoAccountDetailsDTO | undefined> =
-    new BehaviorSubject<DtoAccountDetailsDTO | undefined>(undefined);
-  public userData$: Observable<DtoAccountDetailsDTO | undefined> = this.userDataSubject
+  private userDataSubject: BehaviorSubject<AccountDetails | undefined> =
+    new BehaviorSubject<AccountDetails | undefined>(undefined);
+  public userData$: Observable<AccountDetails | undefined> = this.userDataSubject
 
   constructor() { }
 
   setUserData(data: DtoAccountDetailsDTO): void {
-    this.userDataSubject.next(data)
+    const accountDetails = this.fromDtoAccountDetailsDTO(data)
+    this.userDataSubject.next(accountDetails)
   }
 
   clearUserData(): void {
     this.userDataSubject.next(undefined)
   }
 
-  getKnownAccounts$(): Observable<DtoKnownAccountDTO[]> {
+  getKnownAccounts$(): Observable<KnownAccount[]> {
     return this.userData$.pipe(
       map((userData) => userData?.knownAccounts ?? [])
     )
@@ -29,7 +46,7 @@ export class AccountService {
 
   getFirstName$(): Observable<string | undefined> {
     return this.userData$.pipe(
-      map((userData) => userData?.person.firstName)
+      map((userData) => userData?.accountHolderFirstName)
     )
   }
 
@@ -48,10 +65,29 @@ export class AccountService {
         return {
           accountNumber: userData.accountNumber,
           accountType: userData.accountType,
-          accountHolder: `${userData.person.firstName} ${userData.person.lastName}`,
+          accountHolder: `${userData.accountHolderFirstName} ${userData.accountHolderLastName}`,
         }
       })
     )
   }
 
+  private fromDtoAccountDetailsDTO(dtoAccountDetailsDTO: DtoAccountDetailsDTO): AccountDetails {
+    return {
+      accountNumber: dtoAccountDetailsDTO.accountNumber,
+      accountType: dtoAccountDetailsDTO.accountType,
+      accountHolderFirstName: dtoAccountDetailsDTO.person.firstName,
+      accountHolderLastName: dtoAccountDetailsDTO.person.lastName,
+      availableBalance: dtoAccountDetailsDTO.availableBalance,
+      accountId: dtoAccountDetailsDTO.id,
+      knownAccounts: dtoAccountDetailsDTO.knownAccounts.map(this.fromDtoKnownAccountDTO),
+    }
+  }
+
+  private fromDtoKnownAccountDTO(dtoKnownAccountDTO: DtoKnownAccountDTO): KnownAccount {
+    return {
+      accountNumber: dtoKnownAccountDTO.accountNumber,
+      accountHolder: dtoKnownAccountDTO.accountHolder,
+      accountType: dtoKnownAccountDTO.accountType,
+    }
+  }
 }

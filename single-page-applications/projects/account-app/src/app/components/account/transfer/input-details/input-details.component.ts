@@ -4,7 +4,7 @@ import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
 } from "../../../../models/transfer-wallet-account-details";
-import {AccountService} from "../../../../services/account.service";
+import {AccountService, KnownAccount} from "../../../../services/account.service";
 import {TransferState, TransferType} from "../../../../models/transfer-state";
 import {DtoKnownAccountDTO} from "../../../../backend-api";
 import {CurrentAccountDetails} from "../../../../models/current-account-details";
@@ -73,7 +73,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  setStateToAccountCandidates(knownAccounts: DtoKnownAccountDTO[]) {
+  setStateToAccountCandidates(knownAccounts: KnownAccount[]) {
     this.toAccountCandidates = knownAccounts.map ((account) => {
       return {
         accountNumber: account.accountNumber,
