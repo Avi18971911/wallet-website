@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {TransferState} from "../../../../../models/transfer-state";
 import {NgIf} from "@angular/common";
 import {MatError} from "@angular/material/select";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-transfer-amount',
@@ -20,7 +21,8 @@ import {MatError} from "@angular/material/select";
   templateUrl: './transfer-amount.component.html',
   styleUrl: './transfer-amount.component.css'
 })
-export class TransferAmountComponent implements OnInit {
+export class TransferAmountComponent implements OnInit, OnDestroy {
+  private ngUnsubscribe = new Subject<void>();
   protected transferState: Partial<TransferState> = {
     amount: undefined,
   };
@@ -45,10 +47,17 @@ export class TransferAmountComponent implements OnInit {
 
 
   ngOnInit() {
-    this.amountControl.valueChanges.subscribe((value) => {
-      this.transferState.amount = this.roundAndEnforcePattern(value);
-      this.emitTransferState();
-    });
+    this.amountControl.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((value) => {
+        this.transferState.amount = this.roundAndEnforcePattern(value);
+        this.emitTransferState();
+      });
     this.amountControl.markAsTouched({ onlySelf: true });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

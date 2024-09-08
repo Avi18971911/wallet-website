@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {TransferState, TransferType} from "../../../../../models/transfer-state";
 import {MatRadioButton, MatRadioChange, MatRadioGroup} from "@angular/material/radio";
 import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {type} from "node:os";
 import {MatError} from "@angular/material/form-field";
 import {NgIf} from "@angular/common";
+import {takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-transfer-type',
@@ -19,7 +20,8 @@ import {NgIf} from "@angular/common";
   templateUrl: './transfer-type.component.html',
   styleUrl: './transfer-type.component.css'
 })
-export class TransferTypeComponent implements OnInit {
+export class TransferTypeComponent implements OnInit, OnDestroy {
+  private ngUnsubscribe = new EventEmitter<void>();
   protected transferState: Partial<TransferState> = {
     // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
     transferType: undefined,
@@ -37,9 +39,16 @@ export class TransferTypeComponent implements OnInit {
   protected readonly TransferType = TransferType;
 
   ngOnInit() {
-    this.typeControl.valueChanges.subscribe((value) => {
-      this.transferState.transferType = value ?? undefined;
-      this.emitTransferState();
-    });
+    this.typeControl.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((value) => {
+        this.transferState.transferType = value ?? undefined;
+        this.emitTransferState();
+      });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.emit();
+    this.ngUnsubscribe.complete();
   }
 }

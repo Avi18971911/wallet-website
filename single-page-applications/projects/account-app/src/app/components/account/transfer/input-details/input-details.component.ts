@@ -1,5 +1,5 @@
 import {DateFormatService} from "../../../../services/date-format.service";
-import {Component, EventEmitter, OnInit, Optional, Output, SkipSelf} from "@angular/core";
+import {Component, EventEmitter, OnDestroy, OnInit, Optional, Output, SkipSelf} from "@angular/core";
 import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
@@ -15,6 +15,7 @@ import {TransferFromComponent} from "../sub-components/transfer-from/transfer-fr
 import {TransferToComponent} from "../sub-components/transfer-to/transfer-to.component";
 import {TransferAmountComponent} from "../sub-components/transfer-amount/transfer-amount.component";
 import {TransferTypeComponent} from "../sub-components/transfer-type/transfer-type.component";
+import {Subject, takeUntil} from "rxjs";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -31,11 +32,12 @@ import {TransferTypeComponent} from "../sub-components/transfer-type/transfer-ty
   templateUrl: './input-details.component.html',
   styleUrl: './input-details.component.css'
 })
-export class InputDetailsComponent implements OnInit {
+export class InputDetailsComponent implements OnInit, OnDestroy {
   protected dateTime: string = "";
   protected hasSubmitted: boolean = false;
   protected toAccountCandidates: Array<TransferToWalletAccountDetails> = [];
   protected fromAccountCandidates: Array<TransferFromWalletAccountDetails> = [];
+  private ngUnsubscribe = new Subject<void>();
   protected inputDetailsState: TransferState = {
     toAccount: undefined,
     fromAccount: undefined,
@@ -59,15 +61,19 @@ export class InputDetailsComponent implements OnInit {
 
   ngOnInit() {
     this.setDateTime();
-    this.accountService.getKnownAccounts$().subscribe((knownAccounts) => {
-      this.setStateToAccountCandidates(knownAccounts);
-    });
+    this.accountService.getKnownAccounts$()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((knownAccounts) => {
+        this.setStateToAccountCandidates(knownAccounts);
+      });
     // TODO: Update this logic once multiple accounts owned by one person are supported
-    this.accountService.getCurrentAccountDetails$().subscribe((currentAccountDetails) => {
-      if (currentAccountDetails !== undefined) {
-        this.setStateFromAccountCandidates([currentAccountDetails]);
-      }
-    });
+    this.accountService.getCurrentAccountDetails$()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((currentAccountDetails) => {
+        if (currentAccountDetails !== undefined) {
+          this.setStateFromAccountCandidates([currentAccountDetails]);
+        }
+      });
   }
 
   setDateTime() {
@@ -115,5 +121,10 @@ export class InputDetailsComponent implements OnInit {
         this.validatedTransfer.emit(true);
         this.transferService.setTransferData(this.inputDetailsState);
       }
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

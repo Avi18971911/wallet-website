@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {
   MatError,
   MatFormField,
@@ -14,6 +14,7 @@ import {MatInput} from "@angular/material/input";
 import {FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {TransferState,} from "../../../../../models/transfer-state";
 import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-details.pipe";
+import {Subject, takeUntil} from "rxjs";
 
 @Component({
   selector: 'app-transfer-to',
@@ -37,8 +38,9 @@ import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-deta
   styleUrl: './transfer-to.component.css',
   providers: [FormatAccountDetailsPipe],
 })
-export class TransferToComponent implements OnInit {
+export class TransferToComponent implements OnInit, OnDestroy {
   constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
+  private ngUnsubscribe = new Subject<void>();
 
   transferState: Partial<TransferState> = {
     toAccount: undefined,
@@ -56,10 +58,17 @@ export class TransferToComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.toControl.valueChanges.subscribe((value) => {
-      this.transferState.toAccount = value ?? undefined;
-      this.emitTransferState();
-    });
+    this.toControl.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((value) => {
+        this.transferState.toAccount = value ?? undefined;
+        this.emitTransferState();
+      });
     this.toControl.markAsTouched({onlySelf: true});
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

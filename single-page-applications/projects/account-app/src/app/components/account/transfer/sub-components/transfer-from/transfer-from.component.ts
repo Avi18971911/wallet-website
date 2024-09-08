@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {MatFormField} from "@angular/material/form-field";
 import {MatError, MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
 import {TransferFromWalletAccountDetails} from "../../../../../models/transfer-wallet-account-details";
@@ -6,6 +6,7 @@ import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-deta
 import {NgForOf, NgIf} from "@angular/common";
 import { TransferState } from '../../../../../models/transfer-state';
 import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-transfer-from',
@@ -24,9 +25,9 @@ import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
   styleUrl: './transfer-from.component.css',
   providers: [FormatAccountDetailsPipe],
 })
-export class TransferFromComponent implements OnInit {
+export class TransferFromComponent implements OnInit, OnDestroy {
   constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
-
+  private ngUnsubscribe = new Subject<void>()
   protected defaultFromAccount: string = "Please select an account";
   protected transferState: Partial<TransferState> = {
     fromAccount: undefined,
@@ -60,9 +61,15 @@ export class TransferFromComponent implements OnInit {
     }
     this.defaultFromAccount = defaultFromAccount;
 
-    this.fromControl.valueChanges.subscribe((value) => {
-      this.transferState.fromAccount = value ?? undefined;
-      this.emitFromAccountChange();
-    });
+    this.fromControl.valueChanges
+      .subscribe((value) => {
+        this.transferState.fromAccount = value ?? undefined;
+        this.emitFromAccountChange();
+      });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

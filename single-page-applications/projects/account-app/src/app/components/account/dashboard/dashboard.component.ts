@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DtoAccountDetailsDTO} from "../../../backend-api";
 import {CommonModule} from "@angular/common";
 import {BalanceChartComponent} from "./balance-chart/balance-chart.component";
 import {DateFormatService} from "../../../services/date-format.service";
 import {AccountService} from "../../../services/account.service";
 import {LoadingSpinnerComponent} from "../../loading-spinner/loading-spinner.component";
+import {Subject, takeUntil} from "rxjs";
 
 interface CurrentMonthAndYear {
   month: string;
@@ -18,17 +19,22 @@ interface CurrentMonthAndYear {
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   protected userFirstName: string | undefined;
   protected currentBalance: number | undefined;
+  private ngUnsubscribe = new Subject<void>();
   constructor(
     private accountService: AccountService,
     private dateService: DateFormatService,
   ) { }
 
   ngOnInit() {
-    this.accountService.getFirstName$().subscribe((firstName) => { this.userFirstName = firstName })
-    this.accountService.getCurrentBalance$().subscribe((currentBalance) => this.currentBalance = currentBalance)
+    this.accountService.getFirstName$()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((firstName) => { this.userFirstName = firstName })
+    this.accountService.getCurrentBalance$()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((currentBalance) => this.currentBalance = currentBalance)
   }
 
   get currentMonthAndYear(): CurrentMonthAndYear {
@@ -39,5 +45,10 @@ export class DashboardComponent implements OnInit {
       month: currentMonth,
       year: currentYear,
     }
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

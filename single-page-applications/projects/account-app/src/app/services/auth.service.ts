@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {AccountsService, DtoAccountDetailsDTO, DtoAccountLoginDTO,} from "../backend-api";
-import {BehaviorSubject, Observable, Observer, Subject} from "rxjs";
+import {BehaviorSubject, Observable, Observer, Subject, takeUntil} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   private isAuthenticatedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
   public loginResponse$ = new Subject<DtoAccountDetailsDTO>();
+  private ngUnsubscribe = new Subject<void>();
 
   constructor(
     private backendAccountService: AccountsService,
@@ -34,10 +35,17 @@ export class AuthService {
         }
       }
 
-    this.backendAccountService.accountsLoginPost(loginDetails).subscribe(observer)
+    this.backendAccountService.accountsLoginPost(loginDetails)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(observer)
   }
 
   logout() {
     this.isAuthenticatedSubject.next(false);
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

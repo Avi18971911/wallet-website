@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { LoginComponent } from "./components/login/login.component";
 import { HttpClientModule } from "@angular/common/http";
@@ -7,6 +7,7 @@ import {BarController, BarElement, CategoryScale, Chart, Colors, Legend, LinearS
 import {AuthService} from "./services/auth.service";
 import {AccountService} from "./services/account.service";
 import {RouteNames} from "./route-names";
+import {Subject, takeUntil} from "rxjs";
 
 Chart.register(BarController, BarElement, CategoryScale, Colors, LinearScale, Title, Tooltip, Legend);
 
@@ -20,8 +21,9 @@ Chart.register(BarController, BarElement, CategoryScale, Colors, LinearScale, Ti
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'account-app';
+  private ngUnsubscribe = new Subject<void>();
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -29,19 +31,28 @@ export class AppComponent implements OnInit {
   ) {}
   ngOnInit() {
     this.router.navigate([RouteNames.LOGIN]);
-    this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
-      if (isAuthenticated) {
-        this.router.navigate([RouteNames.ACCOUNT]);
-      }
-      else {
-        this.accountService.clearUserData()
-        this.router.navigate([RouteNames.LOGIN]);
-      }
+    this.authService.isAuthenticated$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((isAuthenticated) => {
+        if (isAuthenticated) {
+          this.router.navigate([RouteNames.ACCOUNT]);
+        }
+        else {
+          this.accountService.clearUserData()
+          this.router.navigate([RouteNames.LOGIN]);
+        }
     });
-    this.authService.loginResponse$.subscribe((response) => {
-      if (response) {
-        this.accountService.setUserData(response);
-      }
+    this.authService.loginResponse$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((response) => {
+        if (response) {
+          this.accountService.setUserData(response);
+        }
     });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
