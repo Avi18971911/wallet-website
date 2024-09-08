@@ -1,4 +1,3 @@
-import {DateFormatService} from "../../../../services/date-format.service";
 import {Component, EventEmitter, OnDestroy, OnInit, Optional, Output, SkipSelf} from "@angular/core";
 import {
   TransferFromWalletAccountDetails,
@@ -6,8 +5,6 @@ import {
 } from "../../../../models/transfer-wallet-account-details";
 import {AccountService, KnownAccount} from "../../../../services/account.service";
 import {TransferState, TransferType} from "../../../../models/transfer-state";
-import {DtoKnownAccountDTO} from "../../../../backend-api";
-import {CurrentAccountDetails} from "../../../../models/current-account-details";
 import {MatButtonToggle} from "@angular/material/button-toggle";
 import {MatButton} from "@angular/material/button";
 import {TransferService} from "../../../../services/transfer.service";
@@ -68,7 +65,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((currentAccountDetails) => {
         if (currentAccountDetails !== undefined) {
-          this.setStateFromAccountCandidates([currentAccountDetails]);
+          this.setStateFromAccountCandidates(currentAccountDetails);
         }
       });
   }
@@ -76,6 +73,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   setStateToAccountCandidates(knownAccounts: KnownAccount[]) {
     this.toAccountCandidates = knownAccounts.map ((account) => {
       return {
+        id: account.id,
         accountNumber: account.accountNumber,
         recipientName: account.accountHolder,
         accountType: this.formatAccountType(account.accountType)
@@ -83,7 +81,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  setStateFromAccountCandidates(knownAccounts: CurrentAccountDetails[]) {
+  setStateFromAccountCandidates(knownAccounts: KnownAccount[]) {
     this.fromAccountCandidates = knownAccounts.map ((account) => {
       return {
         accountNumber: account.accountNumber,
