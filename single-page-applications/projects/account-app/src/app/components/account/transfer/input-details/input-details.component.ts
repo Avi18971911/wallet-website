@@ -33,7 +33,6 @@ import {Subject, takeUntil} from "rxjs";
   styleUrl: './input-details.component.css'
 })
 export class InputDetailsComponent implements OnInit, OnDestroy {
-  protected dateTime: string = "";
   protected hasSubmitted: boolean = false;
   protected toAccountCandidates: Array<TransferToWalletAccountDetails> = [];
   protected fromAccountCandidates: Array<TransferFromWalletAccountDetails> = [];

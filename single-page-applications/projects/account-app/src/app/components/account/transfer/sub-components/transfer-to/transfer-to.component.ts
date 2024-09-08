@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output} from '@angular/core';
 import {
   MatError,
   MatFormField,
@@ -38,7 +38,7 @@ import {Subject, takeUntil} from "rxjs";
   styleUrl: './transfer-to.component.css',
   providers: [FormatAccountDetailsPipe],
 })
-export class TransferToComponent implements OnInit, OnDestroy {
+export class TransferToComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
   private ngUnsubscribe = new Subject<void>();
 
@@ -64,11 +64,16 @@ export class TransferToComponent implements OnInit, OnDestroy {
         this.transferState.toAccount = value ?? undefined;
         this.emitTransferState();
       });
-    this.toControl.markAsTouched({onlySelf: true});
   }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  ngOnChanges() {
+    if (this.hasSubmitted) {
+      this.toControl.markAsTouched({onlySelf: true});
+    }
   }
 }
