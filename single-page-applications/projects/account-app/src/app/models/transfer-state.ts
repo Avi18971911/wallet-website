@@ -4,8 +4,10 @@ export enum TransferType {
 }
 
 export interface TransferState {
-  toAccount: string | undefined;
-  fromAccount: string | undefined;
+  toAccountNumber: string | undefined;
+  toAccountId: string | undefined;
+  fromAccountNumber: string | undefined;
+  fromAccountId: string | undefined;
   amount: number | undefined;
   transferType: TransferType | undefined;
   recipientName: string | undefined;

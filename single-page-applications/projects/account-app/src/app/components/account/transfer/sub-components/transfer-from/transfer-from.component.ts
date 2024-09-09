@@ -30,7 +30,7 @@ export class TransferFromComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>()
   protected defaultFromAccount: string = "Please select an account";
   protected transferState: Partial<TransferState> = {
-    fromAccount: undefined,
+    fromAccountNumber: undefined,
   }
 
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
@@ -55,21 +55,24 @@ export class TransferFromComponent implements OnInit, OnDestroy {
     this.fromAccountChange.emit(this.transferState)
   }
 
+  private setTransferStateFromAccountDetails(accountDetails: TransferFromWalletAccountDetails | null | undefined) {
+    this.transferState.fromAccountNumber =
+      accountDetails ? this.formatAccountDetailsPipe.transformAccountNumberWithType(accountDetails) : undefined;
+    this.transferState.fromAccountId = accountDetails?.id ?? undefined;
+  }
+
   ngOnInit() {
     const defaultFromAccount = this.getDefaultFromAccount();
     if (defaultFromAccount !== "Please select an account") {
       this.fromControl.setValue(this.fromCandidateAccountDetails[0]);
-      this.transferState.fromAccount = this.formatAccountDetailsPipe.transformAccountNumberWithType(
-        this.fromCandidateAccountDetails[0]
-      );
+      this.setTransferStateFromAccountDetails(this.fromCandidateAccountDetails[0]);
       this.emitFromAccountChange()
     }
     this.defaultFromAccount = defaultFromAccount;
 
     this.fromControl.valueChanges
       .subscribe((value) => {
-        this.transferState.fromAccount =
-          value ? this.formatAccountDetailsPipe.transformAccountNumberWithType(value) : undefined;
+        this.setTransferStateFromAccountDetails(value);
         this.emitFromAccountChange();
       });
   }

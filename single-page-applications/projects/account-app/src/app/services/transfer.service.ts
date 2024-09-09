@@ -4,8 +4,10 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {TransactionsService} from "../backend-api";
 
 export interface TransferData {
-  toAccount: string;
-  fromAccount: string;
+  toAccountNumber: string;
+  toAccountId: string;
+  fromAccountNumber: string;
+  fromAccountId: string;
   amount: number;
   recipientName: string;
 }
@@ -24,8 +26,10 @@ export class TransferService {
     }
 
     const transferData: TransferData = {
-      toAccount: transferState.toAccount!,
-      fromAccount: transferState.fromAccount!,
+      toAccountNumber: transferState.toAccountNumber!,
+      toAccountId: transferState.toAccountId!,
+      fromAccountNumber: transferState.fromAccountNumber!,
+      fromAccountId: transferState.fromAccountId!,
       amount: transferState.amount!,
       recipientName: transferState.recipientName!,
     }
@@ -46,8 +50,8 @@ export class TransferService {
 
   private isTransferStateValid(transferState: TransferState): boolean {
     return !!(
-      transferState.toAccount &&
-      transferState.fromAccount &&
+      transferState.toAccountNumber &&
+      transferState.fromAccountNumber &&
       transferState.amount &&
       transferState.recipientName
     );

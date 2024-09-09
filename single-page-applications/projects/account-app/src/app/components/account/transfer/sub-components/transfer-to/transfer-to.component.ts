@@ -43,7 +43,7 @@ export class TransferToComponent implements OnInit, OnDestroy, OnChanges {
   private ngUnsubscribe = new Subject<void>();
 
   transferState: Partial<TransferState> = {
-    toAccount: undefined,
+    toAccountNumber: undefined,
     recipientName: undefined,
   }
 
@@ -65,9 +65,10 @@ export class TransferToComponent implements OnInit, OnDestroy, OnChanges {
     this.toControl.valueChanges
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((value) => {
-        this.transferState.toAccount =
+        this.transferState.toAccountNumber =
           value ? this.formatAccountDetailsPipe.transformAccountNumberWithType(value) : undefined;
         this.transferState.recipientName = value?.recipientName ?? undefined;
+        this.transferState.toAccountId = value?.id ?? undefined;
         this.emitTransferState();
       });
   }

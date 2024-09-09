@@ -35,8 +35,10 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   protected fromAccountCandidates: Array<TransferFromWalletAccountDetails> = [];
   private ngUnsubscribe = new Subject<void>();
   protected inputDetailsState: TransferState = {
-    toAccount: undefined,
-    fromAccount: undefined,
+    toAccountNumber: undefined,
+    toAccountId: undefined,
+    fromAccountNumber: undefined,
+    fromAccountId: undefined,
     amount: undefined,
     transferType: undefined,
     recipientName: undefined,
@@ -84,6 +86,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   setStateFromAccountCandidates(knownAccounts: KnownAccount[]) {
     this.fromAccountCandidates = knownAccounts.map ((account) => {
       return {
+        id: account.id,
         accountNumber: account.accountNumber,
         accountHolder: account.accountHolder,
         accountType: this.formatAccountType(account.accountType)
@@ -98,8 +101,8 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   validateAndProceed() {
     this.hasSubmitted = true;
     if (
-      this.inputDetailsState.toAccount !== undefined &&
-      this.inputDetailsState.fromAccount !== undefined &&
+      this.inputDetailsState.toAccountNumber !== undefined &&
+      this.inputDetailsState.fromAccountNumber !== undefined &&
       this.inputDetailsState.amount !== undefined &&
       this.inputDetailsState.transferType !== undefined &&
       this.inputDetailsState.recipientName !== undefined
