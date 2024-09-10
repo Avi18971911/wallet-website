@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {TransferState} from "../models/transfer-state";
-import {BehaviorSubject, Subject} from "rxjs";
-import {TransactionsService} from "../backend-api";
+import {BehaviorSubject, Subject, throwError} from "rxjs";
+import {DtoTransactionRequest, TransactionsService} from "../backend-api";
 
 export interface TransferData {
   toAccountNumber: string;
@@ -46,6 +46,19 @@ export class TransferService {
   }
 
   submitTransfer() {
+    console.log('Submitting transfer...');
+    const transferData = this.transferSubject.value
+    if (!transferData) {
+      return throwError(() => new Error('No transfer data to submit.'));
+    }
+
+    const transactionRequest: DtoTransactionRequest = {
+      amount: transferData.amount,
+      fromAccount: transferData.fromAccountId,
+      toAccount: transferData.toAccountId,
+    }
+
+    return this.transactionsService.transactionsPost(transactionRequest)
   }
 
   private isTransferStateValid(transferState: TransferState): boolean {

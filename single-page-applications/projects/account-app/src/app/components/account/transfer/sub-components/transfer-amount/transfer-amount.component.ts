@@ -43,7 +43,7 @@ export class TransferAmountComponent implements OnInit, OnDestroy, OnChanges {
     if (!value) return undefined;
     const roundedValue = Math.ceil(value * 100) / 100;
     const roundedNum = parseFloat(roundedValue.toFixed(2));
-    if (roundedNum !== value) {
+    if (roundedNum.toString().length !== value.toString().length) {
       return undefined;
     }
     return roundedNum;

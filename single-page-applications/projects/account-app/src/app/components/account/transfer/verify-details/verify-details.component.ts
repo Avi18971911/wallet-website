@@ -17,6 +17,17 @@ export class VerifyDetailsComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   constructor(private transferService: TransferService) {}
 
+  protected submitTransfer() {
+    this.transferService.submitTransfer().subscribe({
+      next: () => {
+        console.log('Transfer submitted');
+      },
+      error: (error) => {
+        console.error('Error submitting transfer:', error);
+      }
+    });
+  }
+
   ngOnInit() {
     this.transferService.getTransferData()
       .pipe(takeUntil(this.ngUnsubscribe))
