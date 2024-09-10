@@ -13,6 +13,7 @@ import {TransferToComponent} from "../sub-components/transfer-to/transfer-to.com
 import {TransferAmountComponent} from "../sub-components/transfer-amount/transfer-amount.component";
 import {TransferTypeComponent} from "../sub-components/transfer-type/transfer-type.component";
 import {Subject, takeUntil} from "rxjs";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -43,13 +44,18 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     transferType: undefined,
     recipientName: undefined,
   };
+  protected transferForm!: FormGroup;
+  protected transferTypeControl!: FormControl<TransferType | undefined>;
+  protected fromAccountControl!: FormControl<TransferFromWalletAccountDetails | undefined>;
+  protected toAccountControl!: FormControl<TransferToWalletAccountDetails | undefined>;
+  protected amountControl!: FormControl<number | undefined>;
 
   constructor(
     private accountService: AccountService,
     @SkipSelf() private transferService: TransferService,
   ) { }
 
-  updateInputDetailsState(partialState: Partial<TransferState>) {
+  protected updateInputDetailsState(partialState: Partial<TransferState>) {
     console.log('Partial state:', partialState);
     console.log('Current state:', this.inputDetailsState);
     this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
@@ -70,9 +76,10 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
           this.setStateFromAccountCandidates(currentAccountDetails);
         }
       });
+    this.initializeForm();
   }
 
-  setStateToAccountCandidates(knownAccounts: KnownAccount[]) {
+  private setStateToAccountCandidates(knownAccounts: KnownAccount[]) {
     this.toAccountCandidates = knownAccounts.map ((account) => {
       return {
         id: account.id,
@@ -83,7 +90,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  setStateFromAccountCandidates(knownAccounts: KnownAccount[]) {
+  private setStateFromAccountCandidates(knownAccounts: KnownAccount[]) {
     this.fromAccountCandidates = knownAccounts.map ((account) => {
       return {
         id: account.id,
@@ -94,11 +101,11 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  formatAccountType(accountType: string): string {
+  private formatAccountType(accountType: string): string {
     return accountType.charAt(0).toUpperCase() + accountType.substring(1).toLowerCase()
   }
 
-  validateAndProceed() {
+  protected validateAndProceed() {
     this.hasSubmitted = true;
     if (
       this.inputDetailsState.toAccountNumber !== undefined &&
@@ -109,6 +116,38 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     ) {
         this.transferService.setTransferData(this.inputDetailsState);
       }
+  }
+
+  private initializeForm(): void {
+    this.transferTypeControl = new FormControl<TransferType | undefined>(
+      undefined, {nonNullable: true, validators: [Validators.required]}
+    );
+
+    this.fromAccountControl = new FormControl<TransferFromWalletAccountDetails | undefined>(
+      undefined, {nonNullable: true, validators: [Validators.required]}
+      );
+
+    this.toAccountControl = new FormControl<TransferToWalletAccountDetails | undefined>(
+      undefined, {nonNullable: true, validators: [Validators.required]}
+    );
+
+    this.amountControl = new FormControl<number | undefined>(
+      undefined, {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.pattern(/^\d+(\.\d{1,2})?$/),
+          Validators.min(0.01),
+        ]
+      }
+    );
+
+    this.transferForm = new FormGroup({
+      transferType: this.transferTypeControl,
+      fromAccount: this.fromAccountControl,
+      toAccount: this.toAccountControl,
+      amount: this.amountControl,
+    });
   }
 
   ngOnDestroy() {

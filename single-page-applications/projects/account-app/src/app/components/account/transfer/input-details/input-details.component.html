@@ -19,6 +19,7 @@
 
     <app-transfer-type
       (transferStateChange)="updateInputDetailsState($event)"
+      [typeControl]="transferTypeControl"
       [hasSubmitted]="hasSubmitted"
     ></app-transfer-type>
   </div>

@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges} from '@angular/core';
 import {TransferState, TransferType} from "../../../../../models/transfer-state";
-import {MatRadioButton, MatRadioChange, MatRadioGroup} from "@angular/material/radio";
-import {FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
-import {type} from "node:os";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {MatError} from "@angular/material/form-field";
 import {NgIf} from "@angular/common";
-import {takeUntil} from "rxjs";
+import {Subject, takeUntil} from "rxjs";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-transfer-type',
@@ -20,17 +20,14 @@ import {takeUntil} from "rxjs";
   templateUrl: './transfer-type.component.html',
   styleUrl: './transfer-type.component.css'
 })
-export class TransferTypeComponent implements OnInit, OnDestroy {
-  private ngUnsubscribe = new EventEmitter<void>();
+export class TransferTypeComponent implements OnChanges, OnDestroy {
   protected transferState: Partial<TransferState> = {
     // TODO: Update this logic to actually schedule the transfer and get the time of the transfer
     transferType: undefined,
   }
-
-  protected typeControl = new FormControl(this.transferState.transferType, [
-    Validators.required,
-  ])
+  private ngUnsubscribe = new Subject<void>();
   @Input() hasSubmitted: boolean = false;
+  @Input() typeControl!: FormControl<TransferType | undefined>
   @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
 
   private emitTransferState() {
@@ -38,17 +35,19 @@ export class TransferTypeComponent implements OnInit, OnDestroy {
   }
   protected readonly TransferType = TransferType;
 
-  ngOnInit() {
-    this.typeControl.valueChanges
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((value) => {
-        this.transferState.transferType = value ?? undefined;
-        this.emitTransferState();
-      });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['typeControl'] && this.typeControl) {
+      this.typeControl.valueChanges
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe((value) => {
+          this.transferState.transferType = value;
+          this.emitTransferState();
+        });
+    }
   }
 
   ngOnDestroy() {
-    this.ngUnsubscribe.emit();
+    this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
 }
