@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
 import {MatFormField} from "@angular/material/form-field";
 import {MatError, MatOption, MatSelect, MatSelectChange} from "@angular/material/select";
 import {TransferFromWalletAccountDetails} from "../../../../../models/transfer-wallet-account-details";
@@ -25,7 +25,7 @@ import {Subject} from "rxjs";
   styleUrl: './transfer-from.component.css',
   providers: [FormatAccountDetailsPipe],
 })
-export class TransferFromComponent implements OnInit, OnDestroy {
+export class TransferFromComponent implements OnChanges, OnDestroy {
   constructor(private formatAccountDetailsPipe: FormatAccountDetailsPipe) {}
   private ngUnsubscribe = new Subject<void>()
   protected defaultFromAccount: string = "Please select an account";
@@ -35,14 +35,8 @@ export class TransferFromComponent implements OnInit, OnDestroy {
 
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
+  @Input() fromControl!: FormControl<TransferFromWalletAccountDetails | undefined>;
   @Output() fromAccountChange = new EventEmitter<Partial<TransferState>>();
-
-  protected fromControl = new FormControl<TransferFromWalletAccountDetails | undefined>(
-    undefined,
-    [
-      Validators.required,
-    ]
-  );
 
   private getDefaultFromAccount(): string {
     if (this.fromCandidateAccountDetails.length > 0) {
@@ -61,20 +55,22 @@ export class TransferFromComponent implements OnInit, OnDestroy {
     this.transferState.fromAccountId = accountDetails?.id ?? undefined;
   }
 
-  ngOnInit() {
-    const defaultFromAccount = this.getDefaultFromAccount();
-    if (defaultFromAccount !== "Please select an account") {
-      this.fromControl.setValue(this.fromCandidateAccountDetails[0]);
-      this.setTransferStateFromAccountDetails(this.fromCandidateAccountDetails[0]);
-      this.emitFromAccountChange()
-    }
-    this.defaultFromAccount = defaultFromAccount;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['fromControl'] && this.fromControl) {
+      const defaultFromAccount = this.getDefaultFromAccount();
+      if (defaultFromAccount !== "Please select an account") {
+        this.fromControl.setValue(this.fromCandidateAccountDetails[0]);
+        this.setTransferStateFromAccountDetails(this.fromCandidateAccountDetails[0]);
+        this.emitFromAccountChange()
+      }
+      this.defaultFromAccount = defaultFromAccount;
 
-    this.fromControl.valueChanges
-      .subscribe((value) => {
-        this.setTransferStateFromAccountDetails(value);
-        this.emitFromAccountChange();
-      });
+      this.fromControl.valueChanges
+        .subscribe((value) => {
+          this.setTransferStateFromAccountDetails(value);
+          this.emitFromAccountChange();
+        });
+    }
   }
 
   ngOnDestroy() {
