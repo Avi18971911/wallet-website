@@ -1,4 +1,14 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Optional, Output, SkipSelf} from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Optional,
+  Output,
+  SimpleChanges,
+  SkipSelf
+} from "@angular/core";
 import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
@@ -14,6 +24,7 @@ import {TransferAmountComponent} from "../sub-components/transfer-amount/transfe
 import {TransferTypeComponent} from "../sub-components/transfer-type/transfer-type.component";
 import {Subject, takeUntil} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -28,22 +39,14 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
     TransferTypeComponent
   ],
   templateUrl: './input-details.component.html',
-  styleUrl: './input-details.component.css'
+  styleUrl: './input-details.component.css',
+  providers: [FormatAccountDetailsPipe],
 })
 export class InputDetailsComponent implements OnInit, OnDestroy {
   protected hasSubmitted: boolean = false;
   protected toAccountCandidates: Array<TransferToWalletAccountDetails> = [];
   protected fromAccountCandidates: Array<TransferFromWalletAccountDetails> = [];
   private ngUnsubscribe = new Subject<void>();
-  protected inputDetailsState: TransferState = {
-    toAccountNumber: undefined,
-    toAccountId: undefined,
-    fromAccountNumber: undefined,
-    fromAccountId: undefined,
-    amount: undefined,
-    transferType: undefined,
-    recipientName: undefined,
-  };
   protected transferForm!: FormGroup;
   protected transferTypeControl!: FormControl<TransferType | undefined>;
   protected fromAccountControl!: FormControl<TransferFromWalletAccountDetails | undefined>;
@@ -53,22 +56,14 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private accountService: AccountService,
     @SkipSelf() private transferService: TransferService,
+    private formatAccountDetailsPipe: FormatAccountDetailsPipe,
   ) { }
-
-  protected updateInputDetailsState(partialState: Partial<TransferState>) {
-    console.log('Partial state:', partialState);
-    console.log('Current state:', this.inputDetailsState);
-    this.inputDetailsState = { ...this.inputDetailsState, ...partialState };
-    console.log('Input details state:', this.inputDetailsState);
-  }
-
   ngOnInit() {
     this.accountService.getKnownAccounts$()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((knownAccounts) => {
         this.setStateToAccountCandidates(knownAccounts);
       });
-    // TODO: Update this logic once multiple accounts owned by one person are supported
     this.accountService.getCurrentAccountDetails$()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((currentAccountDetails) => {
@@ -107,15 +102,22 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
 
   protected validateAndProceed() {
     this.hasSubmitted = true;
-    if (
-      this.inputDetailsState.toAccountNumber !== undefined &&
-      this.inputDetailsState.fromAccountNumber !== undefined &&
-      this.inputDetailsState.amount !== undefined &&
-      this.inputDetailsState.transferType !== undefined &&
-      this.inputDetailsState.recipientName !== undefined
-    ) {
-        this.transferService.setTransferData(this.inputDetailsState);
+    if (this.transferForm.valid) {
+      const amount = this.amountControl.value!;
+      const fromAccount = this.fromAccountControl.value!;
+      const toAccount = this.toAccountControl.value!;
+      const transferType = this.transferTypeControl.value!;
+      const transferState: TransferState = {
+        fromAccountNumber: this.formatAccountDetailsPipe.transformAccountNumberWithType(fromAccount),
+        fromAccountId: fromAccount.id,
+        toAccountNumber: this.formatAccountDetailsPipe.transformAccountNumberWithType(toAccount),
+        toAccountId: toAccount.id,
+        amount: amount,
+        transferType: transferType,
+        recipientName: toAccount.recipientName,
       }
+      this.transferService.setTransferData(transferState);
+    }
   }
 
   private initializeForm(): void {

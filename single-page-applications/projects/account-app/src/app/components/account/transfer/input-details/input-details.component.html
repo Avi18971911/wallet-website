@@ -2,26 +2,22 @@
   <div class="components">
     <app-transfer-to
       [toCandidateAccountDetails]="toAccountCandidates"
-      (transferStateChange)="updateInputDetailsState($event)"
       [toControl]="toAccountControl"
       [hasSubmitted]="hasSubmitted"
     > </app-transfer-to>
 
     <app-transfer-from
       [fromCandidateAccountDetails]="fromAccountCandidates"
-      (fromAccountChange)="updateInputDetailsState($event)"
       [fromControl]="fromAccountControl"
       [hasSubmitted]="hasSubmitted"
     > </app-transfer-from>
 
     <app-transfer-amount
-      (transferStateChange)="updateInputDetailsState($event)"
       [amountControl]="amountControl"
       [hasSubmitted]="hasSubmitted"
     ></app-transfer-amount>
 
     <app-transfer-type
-      (transferStateChange)="updateInputDetailsState($event)"
       [typeControl]="transferTypeControl"
       [hasSubmitted]="hasSubmitted"
     ></app-transfer-type>
