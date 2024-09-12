@@ -39,7 +39,6 @@ export class TransferToComponent implements OnChanges {
   @Input() toCandidateAccountDetails: Array<TransferToWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
   @Input() toControl!: FormControl<TransferToWalletAccountDetails | undefined>;
-  @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
 
   ngOnChanges(changes: SimpleChanges) {
     if (this.hasSubmitted) {

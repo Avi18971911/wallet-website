@@ -23,7 +23,6 @@ import {MatError} from "@angular/material/select";
 export class TransferAmountComponent implements OnChanges {
   @Input() hasSubmitted: boolean = false;
   @Input() amountControl!: FormControl<number | undefined>;
-  @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
 
   ngOnChanges() {
     if (this.hasSubmitted) {

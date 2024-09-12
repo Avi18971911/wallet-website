@@ -31,7 +31,6 @@ export class TransferFromComponent implements OnChanges {
   @Input() fromCandidateAccountDetails: Array<TransferFromWalletAccountDetails> = [];
   @Input() hasSubmitted: boolean = false;
   @Input() fromControl!: FormControl<TransferFromWalletAccountDetails | undefined>;
-  @Output() fromAccountChange = new EventEmitter<Partial<TransferState>>();
 
   private getDefaultFromAccount(): string {
     if (this.fromCandidateAccountDetails.length > 0) {

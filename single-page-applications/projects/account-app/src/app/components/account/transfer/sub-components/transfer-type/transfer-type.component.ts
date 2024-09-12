@@ -21,6 +21,5 @@ import {NgIf} from "@angular/common";
 export class TransferTypeComponent {
   @Input() hasSubmitted: boolean = false;
   @Input() typeControl!: FormControl<TransferType | undefined>
-  @Output() transferStateChange = new EventEmitter<Partial<TransferState>>();
   protected readonly TransferType = TransferType;
 }
