@@ -39,18 +39,12 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
         this.navigateToVerifyDetails();
       });
 
-    this.transferService.transferCompleted
+    this.transferService.transferStatus
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => {
-        this.transferSuccess = true;
-        this.navigateToTransferComplete();
-      });
-
-    this.transferService.transferFailed
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(() => {
-        this.transferSuccess = false;
-        this.navigateToTransferComplete();
+      .subscribe((status) => {
+        if (status != undefined) {
+          this.navigateToTransferComplete();
+        }
       });
   }
 
@@ -75,7 +69,13 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
 
   private navigateToTransferComplete() {
     this.currentStep = 3;
-    this.router.navigate(['transfer-complete'], {relativeTo: this.route}).catch((error) => {
+    this.router.navigate(
+      ['transfer-complete'],
+      {
+        relativeTo: this.route,
+        state: { isSuccess: this.transferSuccess }
+      }
+    ).catch((error) => {
       console.error(error);
     });
   }

@@ -16,9 +16,8 @@ export interface TransferData {
 export class TransferService {
   private transferSubject = new BehaviorSubject<TransferData | undefined>(undefined);
   private transferData$ = this.transferSubject.asObservable();
+  transferStatus = new BehaviorSubject<boolean | undefined>(undefined);
   transferValidated = new Subject<void>()
-  transferCompleted = new Subject<void>()
-  transferFailed = new Subject<void>()
   constructor(private transactionsService: TransactionsService) { }
 
   setTransferData(transferState: TransferState): void {
@@ -39,9 +38,8 @@ export class TransferService {
     this.transferSubject.next(transferData)
   }
 
-  cancelTransferData(): void {
+  cancelTransfer(): void {
     this.clearTransferData()
-    this.transferSubject.next(undefined)
   }
 
   getTransferData() {
@@ -52,7 +50,6 @@ export class TransferService {
     const transferData = this.transferSubject.value
     if (!transferData) {
       this.clearTransferData();
-      this.transferFailed.next();
       return;
     }
 
@@ -65,12 +62,10 @@ export class TransferService {
     this.transactionsService.transactionsPost(transactionRequest)
       .subscribe({
         next: () => {
-          this.clearTransferData()
-          this.transferCompleted.next()
+          this.transferStatus.next(true)
         },
         error: (error) => {
-          this.clearTransferData()
-          this.transferFailed.next()
+          this.transferStatus.next(false)
         }
       })
   }
@@ -86,5 +81,6 @@ export class TransferService {
 
   private clearTransferData() {
     this.transferSubject.next(undefined)
+    this.transferStatus.next(undefined)
   }
 }
