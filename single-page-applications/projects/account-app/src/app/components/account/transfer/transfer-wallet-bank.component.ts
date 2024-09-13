@@ -27,7 +27,6 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   protected currentStep: number = 1;
   protected dateTime: string = "";
-  transferSuccess = false;
 
   ngOnInit() {
     this.navigateToInputDetails()
@@ -69,13 +68,7 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
 
   private navigateToTransferComplete() {
     this.currentStep = 3;
-    this.router.navigate(
-      ['transfer-complete'],
-      {
-        relativeTo: this.route,
-        state: { isSuccess: this.transferSuccess }
-      }
-    ).catch((error) => {
+    this.router.navigate(['transfer-complete'], {relativeTo: this.route,}).catch((error) => {
       console.error(error);
     });
   }
