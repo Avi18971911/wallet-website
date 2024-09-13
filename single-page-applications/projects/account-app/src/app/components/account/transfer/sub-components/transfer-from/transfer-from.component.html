@@ -14,6 +14,10 @@
           {{ account | formatAccountDetails }}
         </mat-option>
       </mat-select>
+      <mat-hint>
+        Remaining Balance is {{fromControl.value?.availableBalance |
+          currency:'USD':'symbol':'1.2-2'}}
+      </mat-hint>
       <!-- Error messages -->
       <mat-error *ngIf="hasSubmitted && fromControl.hasError('required')">
         From account is required.

@@ -1,10 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {MatFormField} from "@angular/material/form-field";
-import {MatError, MatOption, MatSelect} from "@angular/material/select";
+import {MatError, MatHint, MatOption, MatSelect} from "@angular/material/select";
 import {TransferFromWalletAccountDetails} from "../../../../../models/transfer-wallet-account-details";
 import {FormatAccountDetailsPipe} from "../../../../../pipes/format-account-details.pipe";
-import {NgForOf, NgIf} from "@angular/common";
-import { TransferState } from '../../../../../models/transfer-state';
+import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 
 @Component({
@@ -13,12 +12,14 @@ import {FormControl, ReactiveFormsModule} from "@angular/forms";
   imports: [
     MatFormField,
     MatSelect,
+    MatHint,
     MatOption,
     FormatAccountDetailsPipe,
     NgForOf,
     ReactiveFormsModule,
     MatError,
-    NgIf
+    NgIf,
+    CurrencyPipe
   ],
   templateUrl: './transfer-from.component.html',
   styleUrl: './transfer-from.component.css',
