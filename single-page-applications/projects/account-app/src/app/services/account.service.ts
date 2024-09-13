@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {DtoAccountDetailsDTO, DtoAccountDTO, DtoKnownAccountDTO, DtoPersonDTO} from "../backend-api";
+import {AccountsService, DtoAccountDetailsDTO, DtoAccountDTO, DtoKnownAccountDTO, DtoPersonDTO} from "../backend-api";
 import {BehaviorSubject, map, Observable} from "rxjs";
 
 export interface KnownAccount {
@@ -32,11 +32,22 @@ export class AccountService {
     new BehaviorSubject<AccountDetails | undefined>(undefined);
   public userData$: Observable<AccountDetails | undefined> = this.userDataSubject
 
-  constructor() { }
+  constructor(private backendAccountService: AccountsService) { }
 
   setUserData(data: DtoAccountDetailsDTO): void {
     const accountDetails = this.fromDtoAccountDetailsDTO(data)
     this.userDataSubject.next(accountDetails)
+  }
+
+  refreshUserData(): void {
+    if (!this.userDataSubject.value) {
+      return;
+    }
+    this.backendAccountService.accountsAccountIdGet(this.userDataSubject.value?.accounts[0].id)
+      .subscribe((data) => {
+        this.setUserData(data);
+      });
+
   }
 
   clearUserData(): void {

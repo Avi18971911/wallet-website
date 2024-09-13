@@ -23,6 +23,7 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
     private router: Router, private route: ActivatedRoute,
     private transferService: TransferService,
     private dateService: DateFormatService,
+    private accountService: AccountService,
   ) {}
   private ngUnsubscribe = new Subject<void>();
   protected currentStep: number = 1;
@@ -42,6 +43,7 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((status) => {
         if (status != undefined) {
+          this.accountService.refreshUserData();
           this.navigateToTransferComplete();
         }
       });
