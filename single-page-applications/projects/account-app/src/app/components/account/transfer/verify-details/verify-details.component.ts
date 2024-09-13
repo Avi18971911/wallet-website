@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TransferData, TransferService} from "../../../../services/transfer.service";
 import {Subject, takeUntil} from "rxjs";
 import {MatButton} from "@angular/material/button";
@@ -15,17 +15,11 @@ import {MatButton} from "@angular/material/button";
 export class VerifyDetailsComponent implements OnInit, OnDestroy {
   transferData: TransferData | undefined;
   private ngUnsubscribe = new Subject<void>();
+  @Output() cancelTransaction = new EventEmitter<void>();
   constructor(private transferService: TransferService) {}
 
   protected submitTransfer() {
-    this.transferService.submitTransfer().subscribe({
-      next: () => {
-        console.log('Transfer submitted');
-      },
-      error: (error) => {
-        console.error('Error submitting transfer:', error);
-      }
-    });
+    this.transferService.submitTransfer();
   }
 
   ngOnInit() {

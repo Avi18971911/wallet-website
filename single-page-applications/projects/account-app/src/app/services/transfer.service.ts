@@ -17,6 +17,8 @@ export class TransferService {
   private transferSubject = new BehaviorSubject<TransferData | undefined>(undefined);
   private transferData$ = this.transferSubject.asObservable();
   transferValidated = new Subject<void>()
+  transferCompleted = new Subject<void>()
+  transferFailed = new Subject<void>()
   constructor(private transactionsService: TransactionsService) { }
 
   setTransferData(transferState: TransferState): void {
@@ -37,7 +39,8 @@ export class TransferService {
     this.transferSubject.next(transferData)
   }
 
-  clearTransferData(): void {
+  cancelTransferData(): void {
+    this.clearTransferData()
     this.transferSubject.next(undefined)
   }
 
@@ -46,10 +49,11 @@ export class TransferService {
   }
 
   submitTransfer() {
-    console.log('Submitting transfer...');
     const transferData = this.transferSubject.value
     if (!transferData) {
-      return throwError(() => new Error('No transfer data to submit.'));
+      this.clearTransferData();
+      this.transferFailed.next();
+      return;
     }
 
     const transactionRequest: DtoTransactionRequest = {
@@ -58,7 +62,17 @@ export class TransferService {
       toAccount: transferData.toAccountId,
     }
 
-    return this.transactionsService.transactionsPost(transactionRequest)
+    this.transactionsService.transactionsPost(transactionRequest)
+      .subscribe({
+        next: () => {
+          this.clearTransferData()
+          this.transferCompleted.next()
+        },
+        error: (error) => {
+          this.clearTransferData()
+          this.transferFailed.next()
+        }
+      })
   }
 
   private isTransferStateValid(transferState: TransferState): boolean {
@@ -68,5 +82,9 @@ export class TransferService {
       transferState.amount &&
       transferState.recipientName
     );
+  }
+
+  private clearTransferData() {
+    this.transferSubject.next(undefined)
   }
 }
