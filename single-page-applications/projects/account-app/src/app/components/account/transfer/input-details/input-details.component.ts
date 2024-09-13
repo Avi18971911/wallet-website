@@ -13,7 +13,7 @@ import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
 } from "../../../../models/transfer-wallet-account-details";
-import {AccountService, KnownAccount} from "../../../../services/account.service";
+import {Account, AccountService, KnownAccount} from "../../../../services/account.service";
 import {TransferState, TransferType} from "../../../../models/transfer-state";
 import {MatButtonToggle} from "@angular/material/button-toggle";
 import {MatButton} from "@angular/material/button";
@@ -25,6 +25,7 @@ import {TransferTypeComponent} from "../sub-components/transfer-type/transfer-ty
 import {Subject, takeUntil} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
+import {amountLessThanOrEqualToBalance} from "../../../../validators/transfer/amountLessThanOrEqualToBalance";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -85,13 +86,14 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private setStateFromAccountCandidates(knownAccounts: KnownAccount[]) {
-    this.fromAccountCandidates = knownAccounts.map ((account) => {
+  private setStateFromAccountCandidates(accounts: Account[]) {
+    this.fromAccountCandidates = accounts.map ((account) => {
       return {
         id: account.id,
         accountNumber: account.accountNumber,
         accountHolder: account.accountHolder,
-        accountType: this.formatAccountType(account.accountType)
+        accountType: this.formatAccountType(account.accountType),
+        availableBalance: account.availableBalance,
       }
     });
   }
@@ -140,9 +142,16 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.pattern(/^\d+(\.\d{1,2})?$/),
           Validators.min(0.01),
+          amountLessThanOrEqualToBalance(this.fromAccountControl.value?.availableBalance || 0)
         ]
       }
     );
+
+    this.fromAccountControl.valueChanges
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((fromAccount) => {
+        this.updateBalanceForSelectedAccount(fromAccount?.availableBalance || 0, this.amountControl)
+      });
 
     this.transferForm = new FormGroup({
       transferType: this.transferTypeControl,
@@ -151,6 +160,18 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
       amount: this.amountControl,
     });
   }
+
+  private updateBalanceForSelectedAccount(newBalance: number, amountControl: FormControl<number | undefined>): void {
+      amountControl.clearValidators();
+      amountControl.setValidators([
+        Validators.required,
+        Validators.pattern(/^\d+(\.\d{1,2})?$/),
+        Validators.min(1),
+        amountLessThanOrEqualToBalance(newBalance)
+      ]);
+      amountControl.updateValueAndValidity();
+  }
+
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();

@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import {FormControl, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {TransferState} from "../../../../../models/transfer-state";
 import {NgIf} from "@angular/common";
 import {MatError} from "@angular/material/select";
+import {errorMessage} from "../../../../../validators/transfer/amountLessThanOrEqualToBalance";
 
 @Component({
   selector: 'app-transfer-amount',
@@ -29,4 +29,6 @@ export class TransferAmountComponent implements OnChanges {
       this.amountControl.markAsTouched({onlySelf: true});
     }
   }
+
+  protected readonly errorMessage = errorMessage;
 }

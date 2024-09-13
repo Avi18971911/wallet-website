@@ -10,4 +10,5 @@ export interface TransferFromWalletAccountDetails {
   accountNumber: string;
   accountHolder: string;
   accountType: string;
+  availableBalance: number;
 }
