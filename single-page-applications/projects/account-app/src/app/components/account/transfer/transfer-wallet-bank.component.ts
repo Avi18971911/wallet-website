@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProgressBarComponent} from "./progress-bar/progress-bar.component";
-import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterOutlet} from "@angular/router";
 import {AccountService} from "../../../services/account.service";
 import {TransferService} from "../../../services/transfer.service";
 import {filter, Subject, Subscription, takeUntil} from "rxjs";
@@ -45,6 +45,17 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
         if (status != undefined) {
           this.accountService.refreshUserData();
           this.navigateToTransferComplete();
+        }
+      });
+
+    this.router.events
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((event  ) => {
+        if (event instanceof NavigationStart) {
+          const targetUrl = event.url;
+          if (!targetUrl.includes('/to-other-walletbank')) {
+            this.transferService.cancelTransfer()
+          }
         }
       });
   }
