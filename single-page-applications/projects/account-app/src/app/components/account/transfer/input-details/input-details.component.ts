@@ -139,9 +139,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
       undefined, {
         nonNullable: true,
         validators: [
-          Validators.required,
-          Validators.pattern(/^\d+(\.\d{1,2})?$/),
-          Validators.min(0.01),
+          ...this.amountValidatorList,
           amountLessThanOrEqualToBalance(this.fromAccountControl.value?.availableBalance || 0)
         ]
       }
@@ -161,12 +159,16 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  private amountValidatorList = [
+    Validators.required,
+    Validators.pattern(/^\d+(\.\d{1,2})?$/),
+    Validators.min(0.01),
+  ]
+
   private updateBalanceForSelectedAccount(newBalance: number, amountControl: FormControl<number | undefined>): void {
       amountControl.clearValidators();
       amountControl.setValidators([
-        Validators.required,
-        Validators.pattern(/^\d+(\.\d{1,2})?$/),
-        Validators.min(1),
+        ...this.amountValidatorList,
         amountLessThanOrEqualToBalance(newBalance)
       ]);
       amountControl.updateValueAndValidity();
