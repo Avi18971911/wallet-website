@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProgressBarComponent} from "./progress-bar/progress-bar.component";
-import {ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterOutlet} from "@angular/router";
-import {AccountService} from "../../../services/account.service";
-import {TransferService} from "../../../services/transfer.service";
-import {filter, Subject, Subscription, takeUntil} from "rxjs";
-import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {DateFormatService} from "../../../services/date-format.service";
+import {ActivatedRoute, NavigationStart, Router, RouterOutlet} from "@angular/router";
+import {AccountService} from "../../../services/account/account.service";
+import {TransferService} from "../../../services/transfer/transfer.service";
+import {Subject, takeUntil} from "rxjs";
+import {DateFormatService} from "../../../services/util/date-format.service";
+import {RouteNames} from "../../../route-names";
 
 @Component({
   selector: 'app-transfer',
@@ -67,21 +67,21 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
 
   private navigateToInputDetails() {
     this.currentStep = 1;
-    this.router.navigate(['input-details'], {relativeTo: this.route}).catch((error) => {
+    this.router.navigate([RouteNames.INPUT_DETAILS], {relativeTo: this.route}).catch((error) => {
       console.error(error);
     });
   }
 
   private navigateToVerifyDetails() {
     this.currentStep = 2;
-    this.router.navigate(['verify-details'], {relativeTo: this.route}).catch((error) => {
+    this.router.navigate([RouteNames.VERIFY_DETAILS], {relativeTo: this.route}).catch((error) => {
       console.error(error);
     });
   }
 
   private navigateToTransferComplete() {
     this.currentStep = 3;
-    this.router.navigate(['transfer-complete'], {relativeTo: this.route,}).catch((error) => {
+    this.router.navigate([RouteNames.TRANSFER_COMPLETE], {relativeTo: this.route,}).catch((error) => {
       console.error(error);
     });
   }

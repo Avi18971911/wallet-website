@@ -4,8 +4,8 @@ import { LoginComponent } from "./components/login/login.component";
 import { HttpClientModule } from "@angular/common/http";
 import { Router } from "@angular/router";
 import {BarController, BarElement, CategoryScale, Chart, Colors, Legend, LinearScale, Title, Tooltip} from "chart.js";
-import {AuthService} from "./services/auth.service";
-import {AccountService} from "./services/account.service";
+import {AuthService} from "./services/account/auth.service";
+import {AccountService} from "./services/account/account.service";
 import {RouteNames} from "./route-names";
 import {Subject, takeUntil} from "rxjs";
 

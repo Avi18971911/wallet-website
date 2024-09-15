@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {AccountsService, DtoAccountDetailsDTO, DtoAccountLoginDTO,} from "../backend-api";
+import {AccountsService, DtoAccountDetailsDTO, DtoAccountLoginDTO,} from "../../backend-api";
 import {BehaviorSubject, Observable, Observer, Subject, takeUntil} from "rxjs";
 
 @Injectable({

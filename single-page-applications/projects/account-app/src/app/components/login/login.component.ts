@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {DtoAccountDetailsDTO, DtoAccountLoginDTO} from "../../backend-api";
-import {AuthService} from "../../services/auth.service";
+import {AuthService} from "../../services/account/auth.service";
 import {Router} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {animate, keyframes, style, transition, trigger} from "@angular/animations";
-import {AccountService} from "../../services/account.service";
+import {AccountService} from "../../services/account/account.service";
 
 @Component({
   selector: 'app-login',

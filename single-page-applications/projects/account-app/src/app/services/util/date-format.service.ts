@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {DateTime} from "../models/date-time.model";
+import {DateTime} from "../../models/date-time.model";
 
 @Injectable({
   providedIn: 'root'

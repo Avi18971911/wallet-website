@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {DtoAccountDetailsDTO} from "../../../backend-api";
 import {CommonModule} from "@angular/common";
 import {BalanceChartComponent} from "./balance-chart/balance-chart.component";
-import {DateFormatService} from "../../../services/date-format.service";
-import {AccountService} from "../../../services/account.service";
+import {DateFormatService} from "../../../services/util/date-format.service";
+import {AccountService} from "../../../services/account/account.service";
 import {LoadingSpinnerComponent} from "../../loading-spinner/loading-spinner.component";
 import {Subject, takeUntil} from "rxjs";
 

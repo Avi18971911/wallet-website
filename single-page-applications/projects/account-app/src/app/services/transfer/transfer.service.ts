@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {TransferState} from "../models/transfer-state";
+import {TransferState} from "../../models/transfer-state";
 import {BehaviorSubject, Subject, throwError} from "rxjs";
-import {DtoTransactionRequest, TransactionsService} from "../backend-api";
+import {DtoTransactionRequest, TransactionsService} from "../../backend-api";
 
 export interface TransferData {
   toAccountNumber: string;
@@ -18,6 +18,7 @@ export class TransferService {
   private transferData$ = this.transferSubject.asObservable();
   transferStatus = new BehaviorSubject<boolean | undefined>(undefined);
   transferValidated = new Subject<void>()
+  transferCancelled = new Subject<void>()
   constructor(private transactionsService: TransactionsService) { }
 
   setTransferData(transferState: TransferState): void {
@@ -40,6 +41,7 @@ export class TransferService {
 
   cancelTransfer(): void {
     this.clearTransferData()
+    this.transferCancelled.next()
   }
 
   getTransferData() {

@@ -13,11 +13,11 @@ import {
   TransferFromWalletAccountDetails,
   TransferToWalletAccountDetails
 } from "../../../../models/transfer-wallet-account-details";
-import {Account, AccountService, KnownAccount} from "../../../../services/account.service";
+import {Account, AccountService, KnownAccount} from "../../../../services/account/account.service";
 import {TransferState, TransferType} from "../../../../models/transfer-state";
 import {MatButtonToggle} from "@angular/material/button-toggle";
 import {MatButton} from "@angular/material/button";
-import {TransferService} from "../../../../services/transfer.service";
+import {TransferService} from "../../../../services/transfer/transfer.service";
 import {TransferFromComponent} from "../sub-components/transfer-from/transfer-from.component";
 import {TransferToComponent} from "../sub-components/transfer-to/transfer-to.component";
 import {TransferAmountComponent} from "../sub-components/transfer-amount/transfer-amount.component";
@@ -120,6 +120,10 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
       }
       this.transferService.setTransferData(transferState);
     }
+  }
+
+  protected cancelTransfer() {
+    this.transferService.cancelTransfer();
   }
 
   private initializeForm(): void {

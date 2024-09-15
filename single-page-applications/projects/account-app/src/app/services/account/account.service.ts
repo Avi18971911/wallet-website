@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AccountsService, DtoAccountDetailsDTO, DtoAccountDTO, DtoKnownAccountDTO, DtoPersonDTO} from "../backend-api";
+import {AccountsService, DtoAccountDetailsDTO, DtoAccountDTO, DtoKnownAccountDTO, DtoPersonDTO} from "../../backend-api";
 import {BehaviorSubject, map, Observable} from "rxjs";
 
 export interface KnownAccount {

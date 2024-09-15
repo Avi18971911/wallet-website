@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {TransferData, TransferService} from "../../../../services/transfer.service";
+import {TransferData, TransferService} from "../../../../services/transfer/transfer.service";
 import {Subject, takeUntil} from "rxjs";
 import {MatButton} from "@angular/material/button";
 
@@ -7,7 +7,7 @@ import {MatButton} from "@angular/material/button";
   selector: 'app-verify-details',
   standalone: true,
   imports: [
-    MatButton
+    MatButton,
   ],
   templateUrl: './verify-details.component.html',
   styleUrl: './verify-details.component.css'
@@ -20,6 +20,10 @@ export class VerifyDetailsComponent implements OnInit, OnDestroy {
 
   protected submitTransfer() {
     this.transferService.submitTransfer();
+  }
+
+  protected cancelTransfer() {
+    this.transferService.cancelTransfer();
   }
 
   ngOnInit() {

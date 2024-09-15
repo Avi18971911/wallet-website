@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgIf} from "@angular/common";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {ActivatedRoute, Router} from "@angular/router";
-import {TransferService} from "../../../../services/transfer.service";
+import {TransferService} from "../../../../services/transfer/transfer.service";
 import {Subject, takeUntil} from "rxjs";
 
 @Component({
