@@ -81,7 +81,7 @@ export class TransferService {
     );
   }
 
-  private clearTransferData() {
+  clearTransferData() {
     this.transferSubject.next(undefined)
     this.transferStatus.next(undefined)
   }

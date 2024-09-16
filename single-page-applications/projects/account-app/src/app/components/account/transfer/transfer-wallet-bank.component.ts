@@ -6,6 +6,7 @@ import {TransferService} from "../../../services/transfer/transfer.service";
 import {Subject, takeUntil} from "rxjs";
 import {DateFormatService} from "../../../services/util/date-format.service";
 import {RouteNames} from "../../../route-names";
+import {NavigationService} from "../../../services/account/navigation.service";
 
 @Component({
   selector: 'app-transfer',
@@ -24,6 +25,7 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
     private transferService: TransferService,
     private dateService: DateFormatService,
     private accountService: AccountService,
+    private navigationService: NavigationService,
   ) {}
   private ngUnsubscribe = new Subject<void>();
   protected currentStep: number = 1;
@@ -48,13 +50,19 @@ export class TransferWalletBankComponent implements OnInit, OnDestroy {
         }
       });
 
+    this.transferService.transferCancelled
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(() => {
+        this.navigationService.navigateHome();
+      });
+
     this.router.events
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event  ) => {
         if (event instanceof NavigationStart) {
           const targetUrl = event.url;
           if (!targetUrl.includes('/to-other-walletbank')) {
-            this.transferService.cancelTransfer()
+            this.transferService.clearTransferData();
           }
         }
       });

@@ -38,7 +38,6 @@ export class BalanceChartComponent implements OnChanges {
 }
 
 function transformAvailableBalance(availableBalance: number | undefined): number {
-  console.log("Available balance:", availableBalance);
   return availableBalance ?? 0;
 }
 
