@@ -23,6 +23,7 @@ export class VerifyDetailsComponent implements OnInit, OnDestroy {
   }
 
   protected cancelTransfer() {
+    this.alert('Transaction has been canceled. You are being redirected back to the home page.');
     this.transferService.cancelTransfer();
   }
 

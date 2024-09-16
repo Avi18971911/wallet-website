@@ -123,6 +123,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
   }
 
   protected cancelTransfer() {
+    window.alert('Transaction has been canceled. You are being redirected back to the home page.');
     this.transferService.cancelTransfer();
   }
 
