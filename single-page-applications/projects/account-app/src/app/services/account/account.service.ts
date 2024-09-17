@@ -24,6 +24,11 @@ export interface AccountDetails {
   accounts: Account[];
 }
 
+export interface FirstAndLastName {
+  firstName: string;
+  lastName: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -60,9 +65,11 @@ export class AccountService {
     )
   }
 
-  getFirstName$(): Observable<string | undefined> {
+  getFirstAndLastName$(): Observable<FirstAndLastName | undefined> {
     return this.userData$.pipe(
-      map((userData) => userData?.accountHolderFirstName)
+      map((userData) =>
+        userData ? { firstName: userData.accountHolderFirstName, lastName: userData.accountHolderLastName } : undefined
+      )
     )
   }
 
