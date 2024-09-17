@@ -26,6 +26,8 @@ import {Subject, takeUntil} from "rxjs";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {FormatAccountDetailsPipe} from "../../../../pipes/format-account-details.pipe";
 import {amountLessThanOrEqualToBalance} from "../../../../validators/transfer/amountLessThanOrEqualToBalance";
+import {CancelWarningDialogComponent} from "../sub-components/transfer-cancel-warning/cancel-warning-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 @Component({
   selector: 'app-input-details',
   standalone: true,
@@ -58,6 +60,7 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     @SkipSelf() private transferService: TransferService,
     private formatAccountDetailsPipe: FormatAccountDetailsPipe,
+    private dialog: MatDialog,
   ) { }
   ngOnInit() {
     this.accountService.getKnownAccounts$()
@@ -122,11 +125,6 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected cancelTransfer() {
-    window.alert('Transaction has been canceled. You are being redirected back to the home page.');
-    this.transferService.cancelTransfer();
-  }
-
   private initializeForm(): void {
     this.transferTypeControl = new FormControl<TransferType | undefined>(
       undefined, {nonNullable: true, validators: [Validators.required]}
@@ -177,6 +175,15 @@ export class InputDetailsComponent implements OnInit, OnDestroy {
         amountLessThanOrEqualToBalance(newBalance)
       ]);
       amountControl.updateValueAndValidity();
+  }
+
+  protected cancelTransfer() {
+    const dialogRef = this.dialog.open(CancelWarningDialogComponent, {
+      width: '500px',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.transferService.cancelTransfer();
+    })
   }
 
 
